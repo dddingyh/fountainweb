@@ -1,0 +1,20 @@
+# OSS deploy tool
+ossutil64.exe
+.ossutilconfig
+
+# Local Claude/editor config
+.claude/
+
+# Old site archive
+current_site.html
+
+# PPTX extraction artifacts (not used by the site)
+assets/slide*
+assets/epigenic-*
+assets/immunocan-*
+assets/metax-1.*
+assets/Stairmed-1.*
+assets/Turing-1.*
+
+# Task/temp output
+*.output

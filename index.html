@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FountainBridge Capital — Frontier Technology · Early Stage</title>
+<meta name="description" content="China-based venture capital focused on early-stage frontier technology. Conviction before consensus forms.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:    #040C1B;
+  --bg2:   #071223;
+  --blue:  #002D99;
+  --blue2: #0038BF;
+  --gold:  #C4A14E;
+  --gold2: #D9B96A;
+  --white: #FFFFFF;
+  --off:   #E2E9F4;
+  --muted: #6A7D9A;
+  --border:rgba(255,255,255,0.07);
+  --card:  rgba(255,255,255,0.03);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'DM Sans',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--bg); color:var(--white);
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:32px 60px;
+  transition:padding .4s ease,background .4s ease,border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.solid{
+  padding:18px 60px;
+  background:rgba(4,12,27,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-color:var(--border);
+}
+.nav-logo img{height:32px;width:auto;opacity:.95;transition:opacity .2s}
+.nav-logo img:hover{opacity:1}
+.nav-links{display:flex;gap:40px;list-style:none}
+.nav-links a{
+  font-size:13px;font-weight:400;letter-spacing:.6px;
+  color:rgba(255,255,255,.6);
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-r{display:flex;align-items:center;gap:20px}
+.lang-pill{
+  display:flex;background:rgba(255,255,255,.06);
+  border:1px solid var(--border);border-radius:20px;padding:3px;gap:2px;
+}
+.lang-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:12px;font-weight:600;font-family:inherit;
+  padding:4px 11px;border-radius:14px;color:var(--muted);
+  transition:all .2s;
+}
+.lang-btn.on{background:var(--blue);color:#fff}
+
+/* ── HERO ── */
+#hero{
+  position:relative;height:100vh;min-height:600px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('assets/hero-bg.jpg') center/cover no-repeat;
+  transform:scale(1.04);
+  transition:transform 8s ease;
+}
+#hero:hover .hero-bg{transform:scale(1)}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(4,12,27,.55) 0%,
+    rgba(4,12,27,.72) 50%,
+    rgba(4,12,27,.92) 100%);
+}
+.hero-inner{
+  position:relative;z-index:2;
+  text-align:center;padding:0 24px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.hero-logo{
+  height:52px;width:auto;margin-bottom:52px;
+  opacity:0;animation:up .9s ease forwards .3s;
+  filter:drop-shadow(0 0 30px rgba(196,161,78,.15));
+}
+.hero-tagline{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(38px,6vw,76px);font-weight:300;
+  letter-spacing:-1px;line-height:1.1;
+  color:var(--white);margin-bottom:20px;
+  opacity:0;animation:up .9s ease forwards .6s;
+}
+.hero-tagline em{
+  font-style:italic;color:var(--gold);
+}
+.hero-sub{
+  font-size:13px;font-weight:400;letter-spacing:4px;
+  text-transform:uppercase;color:rgba(255,255,255,.5);
+  margin-bottom:48px;
+  opacity:0;animation:up .9s ease forwards .85s;
+}
+.hero-btns{
+  display:flex;gap:14px;flex-wrap:wrap;justify-content:center;
+  opacity:0;animation:up .9s ease forwards 1.1s;
+}
+.btn-gold{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 30px;background:var(--gold);border:none;border-radius:2px;
+  color:#040C1B;font-size:13px;font-weight:500;font-family:inherit;
+  letter-spacing:.5px;cursor:pointer;
+  transition:background .2s,transform .2s,box-shadow .2s;
+}
+.btn-gold:hover{
+  background:var(--gold2);transform:translateY(-2px);
+  box-shadow:0 8px 32px rgba(196,161,78,.3);
+}
+.btn-ghost{
+  display:inline-flex;align-items:center;
+  padding:13px 30px;background:transparent;
+  border:1px solid rgba(255,255,255,.25);border-radius:2px;
+  color:var(--white);font-size:13px;font-weight:400;font-family:inherit;
+  letter-spacing:.5px;cursor:pointer;
+  transition:border-color .2s,background .2s;
+}
+.btn-ghost:hover{
+  border-color:rgba(255,255,255,.6);
+  background:rgba(255,255,255,.05);
+}
+.hero-scroll{
+  position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:up .9s ease forwards 1.5s;
+}
+.hero-scroll-line{
+  width:1px;height:56px;
+  background:linear-gradient(to bottom,rgba(196,161,78,.9),transparent);
+  animation:pulse 2.5s ease infinite;
+}
+
+/* ── STATS BAND ── */
+.stats-band{
+  background:var(--blue);
+  padding:40px 60px;
+  display:flex;justify-content:center;gap:0;
+}
+.stat-item{
+  flex:1;max-width:220px;
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 24px;position:relative;
+}
+.stat-item+.stat-item::before{
+  content:'';position:absolute;left:0;top:10%;height:80%;
+  width:1px;background:rgba(255,255,255,.2);
+}
+.stat-num{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:48px;font-weight:600;letter-spacing:-1px;
+  color:var(--white);line-height:1;
+}
+.stat-label{
+  font-size:11px;font-weight:400;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(255,255,255,.65);
+  margin-top:8px;text-align:center;
+}
+
+/* ── SHARED ── */
+.sec{padding:120px 0}
+.sec-dark{background:var(--bg2)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 60px}
+.eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:4px;
+  text-transform:uppercase;color:var(--gold);margin-bottom:16px;
+}
+.display-h2{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(32px,5vw,58px);font-weight:300;
+  letter-spacing:-1px;line-height:1.05;
+}
+.display-h2 em{font-style:italic;color:var(--gold)}
+.body-text{
+  font-size:16px;font-weight:300;color:var(--muted);
+  line-height:1.9;
+}
+.hr{height:1px;background:linear-gradient(to right,transparent,rgba(196,161,78,.4),transparent)}
+
+/* ── ABOUT ── */
+.about-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:start;
+}
+.about-text{margin-bottom:40px}
+.about-text p{
+  font-size:17px;font-weight:300;color:var(--muted);
+  line-height:1.9;margin-bottom:20px;
+}
+.about-text p strong{color:var(--off);font-weight:500}
+.pillars{display:flex;flex-direction:column;gap:1px}
+.pillar{
+  padding:28px 32px;background:var(--card);border:1px solid var(--border);
+  position:relative;overflow:hidden;transition:background .3s;
+}
+.pillar::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:var(--gold);
+  transform:scaleY(0);transition:transform .35s ease;
+  transform-origin:bottom;
+}
+.pillar:hover{background:rgba(196,161,78,.04)}
+.pillar:hover::before{transform:scaleY(1)}
+.pillar-num{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:13px;font-weight:400;letter-spacing:3px;
+  color:var(--gold);opacity:.7;margin-bottom:10px;
+}
+.pillar-title{font-size:15px;font-weight:500;margin-bottom:8px;color:var(--off)}
+.pillar-desc{font-size:14px;font-weight:300;color:var(--muted);line-height:1.7}
+
+/* ── THESIS ── */
+.thesis-intro{
+  max-width:680px;margin-bottom:64px;
+}
+.thesis-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.thesis-card{
+  background:var(--bg2);padding:48px 40px;
+  position:relative;overflow:hidden;transition:background .3s;
+}
+.thesis-card::after{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(to right,var(--blue),var(--gold));
+  opacity:0;transition:opacity .3s;
+}
+.thesis-card:hover{background:rgba(196,161,78,.03)}
+.thesis-card:hover::after{opacity:1}
+.thesis-icon{
+  font-size:28px;margin-bottom:24px;opacity:.8;
+}
+.thesis-name{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:26px;font-weight:400;margin-bottom:20px;color:var(--off);
+}
+.thesis-items{list-style:none;display:flex;flex-direction:column;gap:8px}
+.thesis-items li{
+  font-size:13px;font-weight:300;color:var(--muted);
+  padding-left:14px;position:relative;line-height:1.5;
+}
+.thesis-items li::before{
+  content:'';position:absolute;left:0;top:7px;
+  width:4px;height:4px;border-radius:50%;
+  background:var(--gold);opacity:.6;
+}
+
+/* ── PORTFOLIO CAROUSEL ── */
+.port-header{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:48px;flex-wrap:wrap;gap:20px;
+}
+.port-nav{display:flex;gap:8px}
+.port-arrow{
+  width:44px;height:44px;border:1px solid var(--border);background:none;
+  border-radius:2px;cursor:pointer;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:border-color .2s,color .2s,background .2s;font-size:18px;
+}
+.port-arrow:hover{border-color:var(--gold);color:var(--gold);background:rgba(196,161,78,.06)}
+.port-track-wrap{overflow:hidden;border:1px solid var(--border)}
+.port-track{
+  display:flex;transition:transform .55s cubic-bezier(.25,.46,.45,.94);
+}
+.port-slide{
+  min-width:100%;display:grid;grid-template-columns:1fr 1fr;
+}
+.port-slide-visual{
+  position:relative;min-height:460px;overflow:hidden;
+  display:flex;align-items:flex-end;padding:48px;
+}
+.port-slide-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 6s ease;
+}
+.port-slide:hover .port-slide-bg{transform:scale(1.04)}
+.port-slide-overlay{
+  position:absolute;inset:0;
+}
+.port-logo-wrap{
+  position:absolute;top:40px;left:40px;
+  background:#fff;border-radius:4px;
+  padding:10px 16px;
+}
+.port-logo-wrap img{height:32px;width:auto;object-fit:contain}
+.port-invested{
+  position:relative;z-index:2;
+  font-size:12px;font-weight:400;letter-spacing:2.5px;
+  text-transform:uppercase;color:rgba(255,255,255,.7);
+}
+.port-slide-info{
+  background:var(--bg2);padding:48px;
+  display:flex;flex-direction:column;justify-content:space-between;
+}
+.port-slide-cat{
+  font-size:11px;font-weight:500;letter-spacing:3px;
+  text-transform:uppercase;color:var(--gold);margin-bottom:20px;
+}
+.port-slide-name{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:42px;font-weight:300;letter-spacing:-1px;
+  line-height:1;margin-bottom:20px;
+}
+.port-slide-desc{
+  font-size:15px;font-weight:300;color:var(--muted);
+  line-height:1.8;margin-bottom:36px;
+}
+.port-metrics{
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;
+  padding-top:32px;border-top:1px solid var(--border);
+}
+.port-metric-label{
+  font-size:10px;font-weight:500;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:6px;
+}
+.port-metric-val{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:22px;font-weight:400;color:var(--off);line-height:1.2;
+}
+.port-metric-val.highlight{color:var(--gold)}
+.port-dots{
+  display:flex;gap:8px;margin-top:20px;justify-content:center;
+}
+.port-dot{
+  width:24px;height:2px;background:var(--border);
+  border-radius:2px;cursor:pointer;transition:background .3s,width .3s;
+}
+.port-dot.on{background:var(--gold);width:40px}
+
+/* ── OTHER PORTFOLIO ── */
+.other-port-title{
+  font-size:13px;font-weight:400;letter-spacing:3px;
+  text-transform:uppercase;color:var(--muted);
+  margin-bottom:32px;padding-bottom:20px;
+  border-bottom:1px solid var(--border);
+}
+.other-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);
+}
+.other-card{
+  background:var(--bg);padding:32px;
+  display:flex;flex-direction:column;gap:10px;
+  position:relative;overflow:hidden;
+  transition:background .3s;
+}
+.other-card::before{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(to right,var(--blue),var(--gold));
+  opacity:0;transition:opacity .3s;
+}
+.other-card:hover{background:rgba(196,161,78,.03)}
+.other-card:hover::before{opacity:1}
+.other-tag{
+  font-size:10px;font-weight:500;letter-spacing:2.5px;
+  text-transform:uppercase;color:var(--gold);opacity:.8;
+}
+.other-name{font-size:18px;font-weight:400;color:var(--off)}
+.other-desc{font-size:13px;font-weight:300;color:var(--muted);line-height:1.6}
+.other-round{font-size:12px;color:var(--blue2);font-weight:400;margin-top:4px}
+
+/* ── TEAM ── */
+.team-intro{max-width:640px;margin-bottom:64px}
+.team-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:32px;
+}
+.team-card{
+  background:var(--card);border:1px solid var(--border);
+  overflow:hidden;transition:border-color .3s;
+}
+.team-card:hover{border-color:rgba(196,161,78,.3)}
+.team-photo{
+  width:100%;aspect-ratio:1;overflow:hidden;
+  background:var(--bg2);
+}
+.team-photo img{
+  width:100%;height:100%;object-fit:cover;object-position:top center;
+  transition:transform .5s ease;filter:grayscale(15%);
+}
+.team-card:hover .team-photo img{transform:scale(1.04);filter:grayscale(0%)}
+.team-info{padding:28px 28px 32px}
+.team-name{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:24px;font-weight:400;margin-bottom:6px;
+}
+.team-role{
+  font-size:12px;font-weight:400;letter-spacing:1.5px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:16px;
+}
+.team-edu{
+  font-size:13px;font-weight:300;color:var(--muted);
+  line-height:1.7;margin-bottom:12px;
+}
+.team-bio{font-size:13px;font-weight:300;color:var(--muted);line-height:1.7}
+
+/* ── FOOTER ── */
+.footer{
+  padding:72px 0 40px;
+  border-top:1px solid var(--border);
+}
+.footer-top{
+  display:grid;grid-template-columns:2fr 1fr 1.5fr;gap:60px;
+  margin-bottom:56px;
+}
+.f-logo{height:28px;width:auto;margin-bottom:18px;opacity:.8}
+.f-tagline{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:18px;font-weight:300;font-style:italic;
+  color:var(--muted);line-height:1.5;
+}
+.f-col-title{
+  font-size:11px;font-weight:500;letter-spacing:3px;
+  text-transform:uppercase;color:var(--gold);margin-bottom:20px;
+}
+.f-links{list-style:none;display:flex;flex-direction:column;gap:12px}
+.f-links a{
+  font-size:14px;font-weight:300;color:var(--muted);transition:color .2s;
+}
+.f-links a:hover{color:var(--white)}
+.f-contacts{display:flex;flex-direction:column;gap:16px}
+.f-c-label{
+  font-size:10px;font-weight:500;letter-spacing:2px;
+  text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:3px;
+}
+.f-c-val{font-size:14px;font-weight:300;color:var(--muted)}
+.footer-bottom{
+  padding-top:24px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.f-copy{font-size:12px;font-weight:300;color:var(--muted);letter-spacing:.5px}
+
+/* ── ANIMATIONS ── */
+@keyframes up{
+  from{opacity:0;transform:translateY(24px)}
+  to  {opacity:1;transform:translateY(0)}
+}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:1}}
+.r{opacity:0;transform:translateY(32px);transition:opacity .75s ease,transform .75s ease}
+.r.v{opacity:1;transform:translateY(0)}
+.r.d1{transition-delay:.1s}.r.d2{transition-delay:.22s}.r.d3{transition-delay:.34s}
+
+/* ── MOBILE ── */
+@media(max-width:960px){
+  .nav{padding:20px 24px}
+  .nav.solid{padding:14px 24px}
+  .nav-links{display:none}
+  .wrap{padding:0 24px}
+  .sec{padding:80px 0}
+  .about-grid,.thesis-grid,.team-grid,.footer-top{grid-template-columns:1fr}
+  .port-slide{grid-template-columns:1fr}
+  .port-slide-visual{min-height:280px}
+  .stats-band{flex-wrap:wrap;padding:32px 24px;gap:32px}
+  .stat-item+.stat-item::before{display:none}
+  .other-grid{grid-template-columns:1fr 1fr}
+  .hero-logo{height:38px}
+}
+@media(max-width:600px){
+  .other-grid{grid-template-columns:1fr}
+  .port-metrics{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#hero">
+    <img src="assets/logo.png" alt="FountainBridge Capital">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about"     data-en="Strategy"  data-zh="投资策略">Strategy</a></li>
+    <li><a href="#thesis"    data-en="Focus"     data-zh="投资方向">Focus</a></li>
+    <li><a href="#portfolio" data-en="Portfolio" data-zh="投资组合">Portfolio</a></li>
+    <li><a href="#team"      data-en="Partners"  data-zh="创始合伙人">Partners</a></li>
+    <li><a href="#contact"   data-en="Contact"   data-zh="联系我们">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <div class="lang-pill">
+      <button class="lang-btn on" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"    id="btn-zh" onclick="setLang('zh')">中</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <img class="hero-logo" src="assets/logo.png" alt="FountainBridge Capital">
+    <h1 class="hero-tagline" data-en="Conviction Before<br>Consensus Forms." data-zh="在共识形成之前，<br>我们已坚定投入。">
+      Conviction Before<br><em>Consensus Forms.</em>
+    </h1>
+    <p class="hero-sub" data-en="Frontier Technology · Early Stage · China" data-zh="前沿科技 · 早期阶段 · 中国">
+      Frontier Technology · Early Stage · China
+    </p>
+    <div class="hero-btns">
+      <a href="#portfolio" class="btn-gold"
+         data-en="View Portfolio →" data-zh="查看投资组合 →">View Portfolio →</a>
+      <a href="#contact"   class="btn-ghost"
+         data-en="Get in Touch" data-zh="联系我们">Get in Touch</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><div class="hero-scroll-line"></div></div>
+</section>
+
+<!-- STATS BAND -->
+<div class="stats-band" id="stats">
+  <div class="stat-item r">
+    <div class="stat-num">50+</div>
+    <div class="stat-label" data-en="Total Portfolios" data-zh="投资组合总数">Total Portfolios</div>
+  </div>
+  <div class="stat-item r d1">
+    <div class="stat-num">$3B+</div>
+    <div class="stat-label" data-en="Follow-on Capital Raised" data-zh="后续轮次融资总额">Follow-on Capital Raised</div>
+  </div>
+  <div class="stat-item r d2">
+    <div class="stat-num">83%</div>
+    <div class="stat-label" data-en="First Round Investments" data-zh="首轮投资占比">First Round Investments</div>
+  </div>
+  <div class="stat-item r d3">
+    <div class="stat-num">70%</div>
+    <div class="stat-label" data-en="Lead Investor" data-zh="领投占比">Lead Investor</div>
+  </div>
+  <div class="stat-item r" style="transition-delay:.46s">
+    <div class="stat-num">5×+</div>
+    <div class="stat-label" data-en="Fund Multiple" data-zh="基金回报倍数">Fund Multiple</div>
+  </div>
+</div>
+
+<div class="hr"></div>
+
+<!-- STRATEGY / ABOUT -->
+<section class="sec" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div class="r">
+        <div class="eyebrow" data-en="OUR STRATEGY" data-zh="投资策略">OUR STRATEGY</div>
+        <h2 class="display-h2" style="margin-bottom:36px">
+          <span data-en="We are one of the few." data-zh="我们是极少数之一。">We are<br><em>one of the few.</em></span>
+        </h2>
+        <div class="about-text">
+          <p data-en="Founded in 2019, FountainBridge Capital is one of the few China-based venture capital funds focused on early-stage frontier technology investments." data-zh="FountainBridge Capital 成立于2019年，是为数不多的专注于早期前沿技术投资的中国风险投资基金之一。">
+            Founded in 2019, FountainBridge Capital is one of the few China-based venture capital funds focused on <strong>early-stage frontier technology investments.</strong>
+          </p>
+          <p data-en="Founded by seasoned early-stage investors, backed by a network of founders, core technical experts, and industry leaders from giant technology companies." data-zh="基金由经验丰富的早期投资人创立，背靠创始人网络、核心技术专家及大型科技公司核心高管组成的生态体系。">
+            Founded by seasoned early-stage investors, backed by a network of founders, core technical experts, and industry leaders from giant technology companies.
+          </p>
+          <p data-en="We have launched USD Fund I and Fund II in 2019 and 2021, with a total of $60M and a fund multiple exceeding 5× based on current portfolios." data-zh="我们于2019年和2021年分别设立美元基金一期和二期，总规模6000万美元，按现有组合计算基金回报倍数已超过5倍。">
+            We have launched Fund I and Fund II in 2019 and 2021, with a total of <strong>$60M</strong>, and the fund multiple has exceeded <strong>5×</strong> based on current portfolios.
+          </p>
+        </div>
+      </div>
+      <div class="pillars r d1">
+        <div class="pillar">
+          <div class="pillar-num">01</div>
+          <div class="pillar-title" data-en="Early-Stage Focus" data-zh="早期聚焦">Early-Stage Focus</div>
+          <div class="pillar-desc" data-en="We dare to lead and write the first check. 83% of our investments are first-round or lead." data-zh="我们敢于领投、写下第一张支票。83%的投资为首轮或领投。">We dare to lead and write the first check. 83% of our investments are first-round or lead.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">02</div>
+          <div class="pillar-title" data-en="Dare to Build" data-zh="敢于共建">Dare to Build</div>
+          <div class="pillar-desc" data-en="We have incubated and co-founded over 10 companies. Many have rapidly emerged as industry pioneers." data-zh="我们已孵化并联合创办超过10家公司，许多已迅速成长为行业先驱和品类领导者。">We have incubated and co-founded over 10 companies. Many have rapidly emerged as industry pioneers.</div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-num">03</div>
+          <div class="pillar-title" data-en="Proven Track Record" data-zh="卓越业绩">Proven Track Record</div>
+          <div class="pillar-desc" data-en="Most portfolios are backed by top VCs in following rounds. Many are progressing toward IPO." data-zh="大多数被投公司在后续轮次中获得顶级机构跟投，许多正在推进IPO进程。">Most portfolios are backed by top VCs in following rounds. Many are progressing toward IPO.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- INVESTMENT THESIS -->
+<section class="sec sec-dark" id="thesis">
+  <div class="wrap">
+    <div class="thesis-intro r">
+      <div class="eyebrow" data-en="INVESTMENT FOCUS" data-zh="投资方向">INVESTMENT FOCUS</div>
+      <h2 class="display-h2" style="margin-bottom:24px">
+        <span data-en="We believe in foundational changes." data-zh="我们相信底层变革的力量。">We believe in<br><em>foundational changes.</em></span>
+      </h2>
+      <p class="body-text" data-en="Since our inception, we have been investing in three key industry drivers that reinforce one another, accelerating the transition into a new intelligent era. China holds a distinct competitive edge across these domains." data-zh="自成立以来，我们持续投资于三大相互强化的核心产业驱动力，加速向新智能时代的跃迁。中国在这些领域拥有独特的竞争优势。">
+        Since our inception, we have been investing in three key industry drivers that reinforce one another, accelerating the transition into a new intelligent era. China holds a distinct competitive edge across these domains.
+      </p>
+    </div>
+    <div class="thesis-grid r d1">
+      <div class="thesis-card">
+        <div class="thesis-icon">⬡</div>
+        <div class="thesis-name" data-en="Compute" data-zh="算力">Compute</div>
+        <ul class="thesis-items">
+          <li data-en="Next-generation computing architecture" data-zh="新一代计算架构">Next-generation computing architecture</li>
+          <li data-en="GPU / CPU chip design" data-zh="GPU / CPU 芯片设计">GPU / CPU chip design</li>
+          <li data-en="Photonic computing" data-zh="光子计算">Photonic computing</li>
+          <li data-en="Data center infrastructure" data-zh="数据中心基础设施">Data center infrastructure</li>
+          <li data-en="Quantum computing" data-zh="量子计算">Quantum computing</li>
+        </ul>
+      </div>
+      <div class="thesis-card">
+        <div class="thesis-icon">◈</div>
+        <div class="thesis-name" data-en="Energy" data-zh="能源">Energy</div>
+        <ul class="thesis-items">
+          <li data-en="New nuclear and fusion" data-zh="新型核能与聚变能源">New nuclear and fusion</li>
+          <li data-en="Grid intelligence" data-zh="电网智能化">Grid intelligence</li>
+          <li data-en="Next-gen battery materials" data-zh="新一代电池材料">Next-gen battery materials</li>
+          <li data-en="Sodium-ion technology" data-zh="钠离子技术">Sodium-ion technology</li>
+          <li data-en="Clean energy infrastructure" data-zh="清洁能源基础设施">Clean energy infrastructure</li>
+        </ul>
+      </div>
+      <div class="thesis-card">
+        <div class="thesis-icon">◇</div>
+        <div class="thesis-name" data-en="Materials" data-zh="材料">Materials</div>
+        <ul class="thesis-items">
+          <li data-en="Semiconductor materials" data-zh="半导体材料">Semiconductor materials</li>
+          <li data-en="Computing infrastructure materials" data-zh="算力基础设施材料">Computing infrastructure materials</li>
+          <li data-en="New materials discovery via AI" data-zh="AI驱动的新材料发现">New materials discovery via AI</li>
+          <li data-en="Biotech and BCI materials" data-zh="生物技术与脑机接口材料">Biotech and BCI materials</li>
+          <li data-en="Advanced packaging" data-zh="先进封装">Advanced packaging</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- PORTFOLIO -->
+<section class="sec" id="portfolio">
+  <div class="wrap">
+    <div class="port-header r">
+      <div>
+        <div class="eyebrow" data-en="FEATURED PORTFOLIO" data-zh="核心投资组合">FEATURED PORTFOLIO</div>
+        <h2 class="display-h2">
+          <span data-en="We find and help create." data-zh="我们发现，更与之共建。">We find and<br><em>help create.</em></span>
+        </h2>
+      </div>
+      <div>
+        <p class="body-text" style="max-width:400px;margin-bottom:24px"
+           data-en="Many of our investments are made before the company is founded. We invest early — when the technology is doubted and the market is skeptical."
+           data-zh="我们的许多投资在公司成立之前就已完成。我们在技术受质疑、市场持怀疑态度时就选择投入。">
+          Many of our investments are made before the company is founded.
+        </p>
+        <div class="port-nav">
+          <button class="port-arrow" id="prev" aria-label="Previous">&#8592;</button>
+          <button class="port-arrow" id="next" aria-label="Next">&#8594;</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAROUSEL -->
+    <div class="port-track-wrap r d1">
+      <div class="port-track" id="portTrack">
+
+        <!-- SLIDE 1: MetaX -->
+        <div class="port-slide">
+          <div class="port-slide-visual">
+            <div class="port-slide-bg" style="background:linear-gradient(135deg,#001A5C 0%,#0D0D1A 50%,#1A001A 100%)"></div>
+            <div class="port-slide-overlay" style="background:linear-gradient(to top,rgba(4,12,27,.7) 0%,transparent 60%)"></div>
+            <div class="port-logo-wrap">
+              <img src="assets/logo-metax.png" alt="MetaX">
+            </div>
+            <div class="port-invested" data-en="Invested · 2019 · Seed Round" data-zh="投资于 · 2019年 · 种子轮">Invested · 2019 · Seed Round</div>
+          </div>
+          <div class="port-slide-info">
+            <div>
+              <div class="port-slide-cat" data-en="SEMICONDUCTOR · AI COMPUTE" data-zh="半导体 · AI算力">SEMICONDUCTOR · AI COMPUTE</div>
+              <div class="port-slide-name">MetaX</div>
+              <p class="port-slide-desc" data-en="Leading GPU chip company in China, widely used in data centers and AI computing. Founded by top R&D leaders from AMD, FountainBridge invested before the company was founded. Rapidly became a top competitor of Nvidia among Chinese chip companies." data-zh="中国领先的GPU芯片公司，广泛应用于数据中心和AI计算。由AMD顶尖研发负责人创立，FountainBridge在公司成立前即完成投资。已迅速成为中国最具竞争力的英伟达挑战者之一。">
+                Leading GPU chip company in China, widely used in data centers and AI computing. Founded by top R&amp;D leaders from AMD. FountainBridge invested before the company was founded.
+              </p>
+            </div>
+            <div class="port-metrics">
+              <div>
+                <div class="port-metric-label" data-en="Initial Valuation" data-zh="初始估值">Initial Valuation</div>
+                <div class="port-metric-val">$70M</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Market Cap at IPO" data-zh="IPO市值">Market Cap at IPO</div>
+                <div class="port-metric-val highlight">$40BN</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="IPO" data-zh="上市">IPO</div>
+                <div class="port-metric-val" data-en="Dec 2025 · Shanghai" data-zh="2025年12月 · 上交所">Dec 2025 · Shanghai</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Gross Multiple" data-zh="总回报倍数">Gross Multiple</div>
+                <div class="port-metric-val highlight">400×</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2: Turing Quantum -->
+        <div class="port-slide">
+          <div class="port-slide-visual">
+            <div class="port-slide-bg" style="background:linear-gradient(135deg,#001A3D 0%,#001430 50%,#002830 100%)"></div>
+            <div class="port-slide-overlay" style="background:linear-gradient(to top,rgba(4,12,27,.7) 0%,transparent 60%)"></div>
+            <div class="port-logo-wrap">
+              <img src="assets/logo-turingq.png" alt="Turing Quantum">
+            </div>
+            <div class="port-invested" data-en="Invested · 2020 · First Round" data-zh="投资于 · 2020年 · 首轮">Invested · 2020 · First Round</div>
+          </div>
+          <div class="port-slide-info">
+            <div>
+              <div class="port-slide-cat" data-en="QUANTUM COMPUTING" data-zh="量子计算">QUANTUM COMPUTING</div>
+              <div class="port-slide-name">Turing Quantum<br><span style="font-size:22px;opacity:.6">图灵量子</span></div>
+              <p class="port-slide-desc" data-en="First and leading photonic quantum computing company in China. Founded by a top physics scientist from SJTU. FountainBridge invested in the first round and helped co-found the company. Established the world's first photonic quantum chip production line." data-zh="中国首家也是领先的光子量子计算公司，由上海交大顶尖物理学家创立。FountainBridge投资首轮并参与联合创始，建立了全球首条光子量子芯片量产线。">
+                First and leading photonic quantum computing company in China. FountainBridge invested in the first round and co-founded the company. Established the world's first photonic quantum chip production line.
+              </p>
+            </div>
+            <div class="port-metrics">
+              <div>
+                <div class="port-metric-label" data-en="Initial Valuation" data-zh="初始估值">Initial Valuation</div>
+                <div class="port-metric-val">$60M</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Latest Valuation" data-zh="最新估值">Latest Valuation</div>
+                <div class="port-metric-val highlight">$2BN</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Status" data-zh="状态">Status</div>
+                <div class="port-metric-val" data-en="IPO In Progress" data-zh="IPO进行中">IPO In Progress</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Gross Multiple" data-zh="总回报倍数">Gross Multiple</div>
+                <div class="port-metric-val highlight">30×</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: StairMed -->
+        <div class="port-slide">
+          <div class="port-slide-visual">
+            <div class="port-slide-bg" style="background:linear-gradient(135deg,#0A0A2E 0%,#14002B 50%,#001428 100%)"></div>
+            <div class="port-slide-overlay" style="background:linear-gradient(to top,rgba(4,12,27,.7) 0%,transparent 60%)"></div>
+            <div class="port-logo-wrap">
+              <img src="assets/logo-stairmed.png" alt="StairMed">
+            </div>
+            <div class="port-invested" data-en="Invested · 2021 · First Round (Sole Investor)" data-zh="投资于 · 2021年 · 首轮（唯一投资方）">Invested · 2021 · First Round (Sole Investor)</div>
+          </div>
+          <div class="port-slide-info">
+            <div>
+              <div class="port-slide-cat" data-en="BRAIN-MACHINE INTERFACE" data-zh="脑机接口">BRAIN-MACHINE INTERFACE</div>
+              <div class="port-slide-name">StairMed</div>
+              <p class="port-slide-desc" data-en="Leading brain-machine interface company in China with global competitive strength. Founded by young scientists from the CAS Neuro Institute. FountainBridge was the sole investor in the first round. One of only two invasive BMI clinical trial systems globally — a rising challenger to Neuralink." data-zh="中国领先的脑机接口公司，具备全球竞争力。由中科院神经所青年科学家创立，FountainBridge为首轮唯一投资方。全球仅有两家拥有侵入式BMI临床试验系统的公司之一，正成为Neuralink的有力挑战者。">
+                Leading brain-machine interface company in China. FountainBridge was the sole investor in the first round. One of only two invasive BMI clinical trial systems globally — a rising challenger to Neuralink.
+              </p>
+            </div>
+            <div class="port-metrics">
+              <div>
+                <div class="port-metric-label" data-en="Initial Valuation" data-zh="初始估值">Initial Valuation</div>
+                <div class="port-metric-val">$30M</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Latest Valuation" data-zh="最新估值">Latest Valuation</div>
+                <div class="port-metric-val highlight">$2BN</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Clinical Progress" data-zh="临床进展">Clinical Progress</div>
+                <div class="port-metric-val" data-en="5 Patients Implanted" data-zh="5例患者植入">5 Patients Implanted</div>
+              </div>
+              <div>
+                <div class="port-metric-label" data-en="Gross Multiple" data-zh="总回报倍数">Gross Multiple</div>
+                <div class="port-metric-val highlight">50×</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /port-track -->
+    </div><!-- /port-track-wrap -->
+
+    <div class="port-dots r d2" id="portDots">
+      <div class="port-dot on" onclick="goSlide(0)"></div>
+      <div class="port-dot"    onclick="goSlide(1)"></div>
+      <div class="port-dot"    onclick="goSlide(2)"></div>
+    </div>
+
+    <!-- OTHER PORTFOLIO -->
+    <div style="margin-top:80px" class="r d3">
+      <div class="other-port-title" data-en="BROADER PORTFOLIO" data-zh="更多投资组合">BROADER PORTFOLIO</div>
+      <div class="other-grid">
+        <div class="other-card">
+          <div class="other-tag" data-en="TECHNOLOGY" data-zh="科技">TECHNOLOGY</div>
+          <div class="other-name">Freebeat</div>
+          <div class="other-desc" data-en="New-tech fitness bicycle designed for US & EU markets" data-zh="面向美欧市场的新科技智能健身单车">New-tech fitness bicycle designed for US &amp; EU markets</div>
+          <div class="other-round" data-en="↗ Angel → $50M+ in 3 follow-on rounds" data-zh="↗ 天使轮 → 后续3轮融资超5000万美元">↗ Angel → $50M+ in 3 follow-on rounds</div>
+        </div>
+        <div class="other-card">
+          <div class="other-tag" data-en="CONSUMER" data-zh="消费">CONSUMER</div>
+          <div class="other-name">San Liang</div>
+          <div class="other-desc" data-en="Premium white spirit brand with solid supply chain" data-zh="拥有稳固供应链的高端白酒新消费品牌">Premium white spirit brand with solid supply chain</div>
+          <div class="other-round" data-en="↗ Angel → 30M+ RMB in 2 follow-on rounds" data-zh="↗ 天使轮 → 后续2轮融资超3000万元">↗ Angel → 30M+ RMB in 2 follow-on rounds</div>
+        </div>
+        <div class="other-card">
+          <div class="other-tag" data-en="CONSUMER" data-zh="消费">CONSUMER</div>
+          <div class="other-name">Jing Mian Tang</div>
+          <div class="other-desc" data-en="New Chinese style instant noodle innovator" data-zh="新中式即食面创新品牌">New Chinese style instant noodle innovator</div>
+          <div class="other-round" data-en="↗ Angel → 100M+ RMB in 3 follow-on rounds" data-zh="↗ 天使轮 → 后续3轮融资超1亿元">↗ Angel → 100M+ RMB in 3 follow-on rounds</div>
+        </div>
+        <div class="other-card">
+          <div class="other-tag" data-en="FOOD & BEVERAGE" data-zh="餐饮">FOOD &amp; BEVERAGE</div>
+          <div class="other-name">Shu Du Feng</div>
+          <div class="other-desc" data-en="Leading new Sichuan cuisine chain brand in China" data-zh="中国领先的新式川菜连锁品牌">Leading new Sichuan cuisine chain brand in China</div>
+          <div class="other-round" data-en="Angel Round" data-zh="天使轮">Angel Round</div>
+        </div>
+        <div class="other-card">
+          <div class="other-tag" data-en="FOOD & BEVERAGE" data-zh="餐饮">FOOD &amp; BEVERAGE</div>
+          <div class="other-name">Da Shi Xiong</div>
+          <div class="other-desc" data-en="Leading new generation Northwest flavor chain brand" data-zh="领先的新生代西北风味连锁品牌">Leading new generation Northwest flavor chain brand</div>
+          <div class="other-round" data-en="Angel Round" data-zh="天使轮">Angel Round</div>
+        </div>
+        <div class="other-card">
+          <div class="other-tag" data-en="FOOD & BEVERAGE" data-zh="餐饮">FOOD &amp; BEVERAGE</div>
+          <div class="other-name">Xiong Da Ye Dumpling</div>
+          <div class="other-desc" data-en="Franchise brand innovator for Chinese dumplings" data-zh="中国水饺特许经营品牌创新者">Franchise brand innovator for Chinese dumplings</div>
+          <div class="other-round" data-en="↗ Angel → Followed by top CVC" data-zh="↗ 天使轮 → 获顶级CVC跟投">↗ Angel → Followed by top CVC</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- TEAM -->
+<section class="sec sec-dark" id="team">
+  <div class="wrap">
+    <div class="r">
+      <div class="eyebrow" data-en="FOUNDING PARTNERS" data-zh="创始合伙人">FOUNDING PARTNERS</div>
+      <h2 class="display-h2" style="margin-bottom:20px">
+        <span data-en="10+ years each. All in, since day one." data-zh="各自10年以上。从创立之初，始终全力以赴。">10+ years each.<br><em>All in, since day one.</em></span>
+      </h2>
+      <p class="body-text team-intro" data-en="Our founding partners have 10+ years of early-stage investment experience each, with complementary expertise across technology sectors. Together, we have built FountainBridge to back the next generation of frontier technology founders." data-zh="创始合伙人各自拥有超过10年早期投资经验，在不同技术领域优势互补。我们共同创建FountainBridge，支持下一代前沿技术创始人。">
+        Our founding partners have 10+ years of early-stage investment experience each, with complementary expertise across technology sectors. Together, we have built FountainBridge to back the next generation of frontier technology founders.
+      </p>
+    </div>
+    <div class="team-grid r d1">
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="assets/partner-andrew.png" alt="Andrew CHEN">
+        </div>
+        <div class="team-info">
+          <div class="team-name">CHEN Changmin</div>
+          <div class="team-role" data-en="Managing Partner" data-zh="管理合伙人">Managing Partner</div>
+          <div class="team-edu" data-en="MSc Financial Engineering, University of Reading" data-zh="英国雷丁大学 金融工程硕士">MSc Financial Engineering, University of Reading</div>
+          <div class="team-bio" data-en="12+ years investment experience. Previously Investment Director at Ventech China, where he established Fund III and led all China early-stage investments. Generated $500M+ USD in returns. Featured investments: Keep (HK:03650), SuperMonkey, StairMed." data-zh="12年以上投资经验。曾任光速中国投资总监，主导创建三期基金并领导中国早期投资，累计实现超5亿美元回报。代表投资：Keep（HK:03650）、超级猩猩、StairMed。">
+            12+ years investment experience. Previously Investment Director at Ventech China, generating $500M+ USD in returns. Featured investments: Keep (HK:03650), SuperMonkey, StairMed.
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="assets/partner-yihan.png" alt="Yihan DING">
+        </div>
+        <div class="team-info">
+          <div class="team-name">DING Yihan</div>
+          <div class="team-role" data-en="Partner, Technology" data-zh="合伙人，科技方向">Partner, Technology</div>
+          <div class="team-edu" data-en="BEng & MEng Materials Science, Tsinghua University" data-zh="清华大学 材料学学士 & 高分子材料硕士">BEng &amp; MEng Materials Science, Tsinghua University</div>
+          <div class="team-bio" data-en="12+ years in tech R&D and early-stage investment. Founding member of Future Capital. Featured investments: Li Auto (NASDAQ:LI), Niu Mobility (NASDAQ:NIU), Narwal Robotics, MetaX (688802), Turing Quantum." data-zh="12年以上科技研发与早期投资经验。未来资本创始成员。代表投资：理想汽车（NASDAQ:LI）、小牛电动（NASDAQ:NIU）、追觅科技、沐曦（688802）、图灵量子。">
+            12+ years in tech R&amp;D and early-stage investment. Founding member of Future Capital. Featured investments: Li Auto (NASDAQ:LI), Niu Mobility (NASDAQ:NIU), MetaX (688802), Turing Quantum.
+          </div>
+        </div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-photo">
+          <img src="assets/partner-paul.png" alt="Paul QI">
+        </div>
+        <div class="team-info">
+          <div class="team-name">QI Jicai</div>
+          <div class="team-role" data-en="Partner, Consumer & DeepTech" data-zh="合伙人，消费与硬科技">Partner, Consumer &amp; DeepTech</div>
+          <div class="team-edu" data-en="MEng Power Machinery, Shanghai Jiao Tong University" data-zh="上海交通大学 动力机械工程硕士">MEng Power Machinery, Shanghai Jiao Tong University</div>
+          <div class="team-bio" data-en="13+ years in entrepreneurship and early-stage investment. Previously MD at Qingsong Fund. Featured investments: Zhangmen Tech (NYSE:ZME), RongNa New Energy, Chainbase." data-zh="13年以上创业与早期投资经验。曾任清松基金董事总经理。代表投资：掌门教育（NYSE:ZME）、融纳新能源、Chainbase。">
+            13+ years in entrepreneurship and early-stage investment. Previously MD at Qingsong Fund. Featured investments: Zhangmen Tech (NYSE:ZME), RongNa New Energy, Chainbase.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- FOOTER / CONTACT -->
+<footer class="footer" id="contact">
+  <div class="wrap">
+    <div class="footer-top r">
+      <div>
+        <img class="f-logo" src="assets/logo.png" alt="FountainBridge Capital">
+        <div class="f-tagline" data-en="Conviction Before Consensus Forms." data-zh="在共识形成之前，我们已坚定投入。">
+          Conviction Before Consensus Forms.
+        </div>
+      </div>
+      <div>
+        <div class="f-col-title" data-en="NAVIGATE" data-zh="导航">NAVIGATE</div>
+        <ul class="f-links">
+          <li><a href="#about"     data-en="Strategy"  data-zh="投资策略">Strategy</a></li>
+          <li><a href="#thesis"    data-en="Focus"     data-zh="投资方向">Focus</a></li>
+          <li><a href="#portfolio" data-en="Portfolio" data-zh="投资组合">Portfolio</a></li>
+          <li><a href="#team"      data-en="Partners"  data-zh="创始合伙人">Partners</a></li>
+          <li><a href="#contact"   data-en="Contact"   data-zh="联系我们">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-title" data-en="CONTACT" data-zh="联系方式">CONTACT</div>
+        <div class="f-contacts">
+          <div>
+            <div class="f-c-label">Email</div>
+            <div class="f-c-val">c@fb-cap.com</div>
+          </div>
+          <div>
+            <div class="f-c-label" data-en="Tel" data-zh="电话">Tel</div>
+            <div class="f-c-val">021 62199027</div>
+          </div>
+          <div>
+            <div class="f-c-label" data-en="Address" data-zh="地址">Address</div>
+            <div class="f-c-val" data-en="Bldg. 24, 91 TianPing Rd., Xuhui, Shanghai" data-zh="上海市徐汇区天平路91弄24号楼">Bldg. 24, 91 TianPing Rd., Xuhui, Shanghai</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="f-copy">© 2026 FountainBridge Capital. All Rights Reserved.</span>
+      <span class="f-copy" style="opacity:.5" data-en="Founded 2019 · Shanghai" data-zh="成立于2019年 · 上海">Founded 2019 · Shanghai</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── LANGUAGE ── */
+let lang='en';
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-en').classList.toggle('on',l==='en');
+  document.getElementById('btn-zh').classList.toggle('on',l==='zh');
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    if(!el.children.length){
+      el.textContent=l==='zh'?(el.dataset.zh||el.dataset.en):el.dataset.en;
+    } else if(el.tagName==='H1'||el.tagName==='H2'){
+      // Allow innerHTML for headings with <br> and <em>
+    }
+  });
+}
+
+/* ── NAVBAR ── */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>60),{passive:true});
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')});
+},{threshold:.07});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+/* ── PORTFOLIO CAROUSEL ── */
+let cur=0;const total=3;
+const track=document.getElementById('portTrack');
+const dots=document.querySelectorAll('.port-dot');
+
+function goSlide(n){
+  cur=((n%total)+total)%total;
+  track.style.transform=`translateX(-${cur*100}%)`;
+  dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+}
+
+document.getElementById('prev').addEventListener('click',()=>goSlide(cur-1));
+document.getElementById('next').addEventListener('click',()=>goSlide(cur+1));
+
+// Auto-advance
+let autoTimer=setInterval(()=>goSlide(cur+1),5000);
+track.parentElement.addEventListener('mouseenter',()=>clearInterval(autoTimer));
+track.parentElement.addEventListener('mouseleave',()=>{
+  autoTimer=setInterval(()=>goSlide(cur+1),5000);
+});
+
+// Touch support
+let tx=0;
+track.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+track.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>40)goSlide(dx<0?cur+1:cur-1);
+},{passive:true});
+</script>
+</body>
+</html>

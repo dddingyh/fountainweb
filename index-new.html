@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FountainBridge Capital — Frontier Technology</title>
+<meta name="description" content="China-based venture capital focused on early-stage frontier technology. Conviction before consensus forms.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & TOKENS ── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:    #040C1B;
+  --bg2:   #071223;
+  --blue:  #002D99;
+  --gold:  #C4A14E;
+  --gold2: #D9B96A;
+  --white: #FFFFFF;
+  --off:   #E2E9F4;
+  --muted: #6A7D9A;
+  --border:rgba(255,255,255,0.07);
+  --card:  rgba(255,255,255,0.03);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Space Grotesk',-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--bg); color:var(--white);
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ── NAV ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:32px 60px;
+  transition:padding .4s ease,background .4s ease,border-color .4s ease;
+  border-bottom:1px solid transparent;
+}
+.nav.solid{
+  padding:18px 60px;
+  background:rgba(4,12,27,.92);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-color:var(--border);
+}
+.nav-logo img{height:30px;width:auto;opacity:.95;transition:opacity .2s}
+.nav-logo img:hover{opacity:1}
+.nav-links{display:flex;gap:40px;list-style:none}
+.nav-links a{
+  font-size:13px;font-weight:400;letter-spacing:.4px;
+  color:rgba(255,255,255,.6);
+  transition:color .2s;
+}
+.nav-links a:hover{color:var(--white)}
+.nav-r{display:flex;align-items:center;gap:20px}
+.lang-pill{
+  display:flex;background:rgba(255,255,255,.05);
+  border-radius:20px;padding:3px;gap:2px;
+  border:1px solid var(--border);
+}
+.lang-btn{
+  background:none;border:none;cursor:pointer;
+  font-size:12px;font-weight:500;font-family:inherit;
+  padding:5px 11px;border-radius:16px;color:var(--muted);
+  transition:all .2s;
+}
+.lang-btn.on{background:var(--blue);color:#fff}
+
+/* ── HERO (logo + slogan only) ── */
+#hero{
+  position:relative;height:100vh;min-height:600px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:url('assets/hero-bg.jpg') center/cover no-repeat;
+  transform:scale(1.04);transition:transform 9s ease;
+}
+#hero:hover .hero-bg{transform:scale(1)}
+.hero-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(180deg,
+    rgba(4,12,27,.55) 0%,rgba(4,12,27,.70) 55%,rgba(4,12,27,.92) 100%);
+}
+.hero-inner{
+  position:relative;z-index:2;text-align:center;padding:0 24px;
+  display:flex;flex-direction:column;align-items:center;
+}
+.hero-logo{
+  height:56px;width:auto;margin-bottom:56px;
+  opacity:0;animation:up 1s ease forwards .3s;
+  filter:drop-shadow(0 0 30px rgba(196,161,78,.15));
+}
+.hero-slogan{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(40px,6.5vw,82px);font-weight:300;
+  letter-spacing:-1px;line-height:1.08;color:var(--white);
+  opacity:0;animation:up 1s ease forwards .6s;
+}
+.hero-slogan em{font-style:italic;color:var(--gold)}
+
+/* ── SHARED SECTION ── */
+.sec{padding:130px 0}
+.sec-alt{background:var(--bg2)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 60px}
+.eyebrow{
+  font-size:11px;font-weight:500;letter-spacing:4px;
+  text-transform:uppercase;color:var(--gold);margin-bottom:20px;
+}
+.display-h2{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(32px,5vw,56px);font-weight:300;
+  letter-spacing:-.5px;line-height:1.08;
+}
+.display-h2 em{font-style:italic;color:var(--gold)}
+.hr{height:1px;background:linear-gradient(to right,transparent,rgba(196,161,78,.4),transparent)}
+
+/* ── PHILOSOPHY ── */
+.philo-wrap{max-width:880px}
+.philo-lead{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(28px,3.6vw,46px);font-weight:300;
+  line-height:1.25;letter-spacing:-.5px;color:var(--off);
+  margin-bottom:36px;
+}
+.philo-lead em{font-style:italic;color:var(--gold)}
+.philo-body{
+  font-size:17px;font-weight:300;color:var(--muted);
+  line-height:1.9;max-width:640px;
+}
+
+/* ── FEATURED PORTFOLIO (full-width image carousel) ── */
+.fp-header{margin-bottom:48px}
+.fp-stage{position:relative;border:1px solid var(--border);overflow:hidden}
+.fp-track{display:flex;transition:transform .7s cubic-bezier(.65,.05,.1,1)}
+.fp-slide{min-width:100%;position:relative;height:560px}
+.fp-slide-bg{position:absolute;inset:0;background-size:cover;background-position:center;transition:transform 7s ease}
+.fp-slide.active .fp-slide-bg{transform:scale(1.05)}
+.fp-slide-scrim{
+  position:absolute;inset:0;
+  background:linear-gradient(105deg,rgba(4,12,27,.92) 0%,rgba(4,12,27,.55) 45%,rgba(4,12,27,.25) 100%),
+             linear-gradient(0deg,rgba(4,12,27,.8) 0%,transparent 45%);
+}
+.fp-logo{
+  position:absolute;top:44px;left:48px;z-index:2;
+  background:#fff;border-radius:5px;padding:11px 18px;
+}
+.fp-logo img{height:34px;width:auto;object-fit:contain}
+.fp-content{
+  position:absolute;left:48px;bottom:52px;z-index:2;
+  max-width:560px;
+}
+.fp-name{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(44px,5vw,68px);font-weight:300;
+  letter-spacing:-1px;line-height:.98;margin-bottom:20px;color:#fff;
+}
+.fp-name small{display:block;font-size:24px;opacity:.55;margin-top:6px;font-weight:300}
+.fp-desc{
+  font-size:16px;font-weight:300;color:var(--off);
+  line-height:1.7;margin-bottom:30px;max-width:500px;
+}
+.fp-meta{display:flex;gap:40px}
+.fp-meta-item{display:flex;flex-direction:column;gap:5px}
+.fp-meta-label{
+  font-size:10px;font-weight:500;letter-spacing:2px;
+  text-transform:uppercase;color:var(--gold);opacity:.85;
+}
+.fp-meta-val{font-size:15px;font-weight:400;color:var(--white)}
+/* controls */
+.fp-nav{
+  position:absolute;bottom:44px;right:48px;z-index:3;
+  display:flex;gap:10px;
+}
+.fp-arrow{
+  width:48px;height:48px;border:1px solid rgba(255,255,255,.2);
+  background:rgba(4,12,27,.4);backdrop-filter:blur(8px);
+  border-radius:50%;cursor:pointer;color:rgba(255,255,255,.85);
+  display:flex;align-items:center;justify-content:center;font-size:18px;
+  transition:border-color .25s,background .25s,color .25s;
+}
+.fp-arrow:hover{border-color:var(--gold);color:var(--gold);background:rgba(4,12,27,.7)}
+.fp-dots{display:flex;gap:7px;justify-content:center;margin-top:24px}
+.fp-dot{width:26px;height:2px;background:var(--border);border-radius:2px;cursor:pointer;transition:all .3s}
+.fp-dot.on{width:42px;background:var(--gold)}
+
+/* ── LOGO WALL (All Portfolios) ── */
+.lw-title{
+  font-size:12px;font-weight:400;letter-spacing:3.5px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:36px;padding-bottom:20px;border-bottom:1px solid var(--border);
+}
+.lw-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:1px;background:var(--border);border:1px solid var(--border);
+}
+.lw-cell{
+  background:var(--bg);
+  aspect-ratio:16/9;
+  display:flex;align-items:center;justify-content:center;
+  padding:28px;transition:background .3s;
+}
+.lw-cell:hover{background:rgba(255,255,255,.02)}
+.lw-cell img{
+  max-height:42px;max-width:80%;width:auto;object-fit:contain;
+  filter:brightness(0) invert(1);
+  opacity:.55;transition:opacity .3s;
+}
+.lw-cell:hover img{opacity:.95}
+.lw-mark{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:22px;font-weight:400;letter-spacing:.5px;
+  color:rgba(255,255,255,.55);text-align:center;line-height:1.15;
+  transition:color .3s;
+}
+.lw-cell:hover .lw-mark{color:rgba(255,255,255,.95)}
+
+/* ── TEAM (name + title only) ── */
+.team-intro{max-width:600px;margin-bottom:60px}
+.team-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1px;background:var(--border);border:1px solid var(--border);
+}
+.team-cell{
+  background:var(--bg2);padding:40px 36px;
+  position:relative;overflow:hidden;transition:background .3s;
+}
+.team-cell::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:var(--gold);transform:scaleY(0);transform-origin:bottom;
+  transition:transform .4s cubic-bezier(.16,1,.3,1);
+}
+.team-cell:hover{background:rgba(196,161,78,.03)}
+.team-cell:hover::before{transform:scaleY(1)}
+.team-name{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:27px;font-weight:400;letter-spacing:-.3px;
+  margin-bottom:10px;color:var(--off);
+}
+.team-role{
+  font-size:12px;font-weight:400;letter-spacing:1.2px;
+  color:var(--gold);line-height:1.5;opacity:.9;
+}
+
+/* ── FOOTER ── */
+.footer{padding:80px 0 40px;border-top:1px solid var(--border)}
+.footer-top{display:grid;grid-template-columns:2fr 1fr 1.5fr;gap:60px;margin-bottom:56px}
+.f-logo{height:26px;width:auto;opacity:.8;margin-bottom:18px}
+.f-tagline{
+  font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:19px;font-weight:300;font-style:italic;
+  color:var(--muted);line-height:1.5;
+}
+.f-col-title{
+  font-size:11px;font-weight:500;letter-spacing:3px;
+  text-transform:uppercase;color:var(--gold);margin-bottom:20px;
+}
+.f-links{list-style:none;display:flex;flex-direction:column;gap:12px}
+.f-links a{font-size:14px;font-weight:300;color:var(--muted);transition:color .2s}
+.f-links a:hover{color:var(--white)}
+.f-contacts{display:flex;flex-direction:column;gap:16px}
+.f-c-label{
+  font-size:10px;font-weight:500;letter-spacing:2px;
+  text-transform:uppercase;color:var(--gold);opacity:.7;margin-bottom:3px;
+}
+.f-c-val{font-size:14px;font-weight:300;color:var(--muted)}
+.footer-bottom{
+  padding-top:24px;border-top:1px solid var(--border);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+}
+.f-copy{font-size:12px;font-weight:300;color:var(--muted);letter-spacing:.5px}
+
+/* ── ANIMATIONS ── */
+@keyframes up{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+.r{opacity:0;transform:translateY(30px);transition:opacity .75s ease,transform .75s ease}
+.r.v{opacity:1;transform:translateY(0)}
+.r.d1{transition-delay:.1s}.r.d2{transition-delay:.22s}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  .nav{padding:20px 24px}
+  .nav.solid{padding:14px 24px}
+  .nav-links{display:none}
+  .wrap{padding:0 24px}
+  .sec{padding:80px 0}
+  .hero-logo{height:40px;margin-bottom:40px}
+  .fp-slide{height:auto;min-height:480px}
+  .fp-logo{top:28px;left:28px}
+  .fp-content{left:28px;right:28px;bottom:90px;max-width:none}
+  .fp-nav{bottom:28px;right:28px}
+  .fp-meta{gap:28px}
+  .lw-grid{grid-template-columns:repeat(2,1fr)}
+  .team-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#hero"><img src="assets/logo.png" alt="FountainBridge Capital"></a>
+  <ul class="nav-links">
+    <li><a href="#philosophy" data-en="Philosophy" data-zh="投资理念">Philosophy</a></li>
+    <li><a href="#portfolio"  data-en="Portfolio"  data-zh="投资组合">Portfolio</a></li>
+    <li><a href="#team"       data-en="Team"       data-zh="团队">Team</a></li>
+    <li><a href="#contact"    data-en="Contact"    data-zh="联系我们">Contact</a></li>
+  </ul>
+  <div class="nav-r">
+    <div class="lang-pill">
+      <button class="lang-btn on" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn"    id="btn-zh" onclick="setLang('zh')">中</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO : logo + slogan only -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <img class="hero-logo" src="assets/logo.png" alt="FountainBridge Capital">
+    <h1 class="hero-slogan" id="heroSlogan"
+        data-en="Conviction Before<br><em>Consensus Forms.</em>"
+        data-zh="在共识形成之前，<br><em>我们已坚定投入。</em>">
+      Conviction Before<br><em>Consensus Forms.</em>
+    </h1>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- PHILOSOPHY -->
+<section class="sec" id="philosophy">
+  <div class="wrap">
+    <div class="philo-wrap r">
+      <div class="eyebrow" data-en="PHILOSOPHY" data-zh="投资理念">PHILOSOPHY</div>
+      <p class="philo-lead"
+         data-en="FountainBridge is a venture capital firm focused on <em>early-stage innovation.</em>"
+         data-zh="FountainBridge 是一家专注于<em>早期创新</em>的风险投资机构。">
+        FountainBridge is a venture capital firm focused on <em>early-stage innovation.</em>
+      </p>
+      <p class="philo-body"
+         data-en="Starting from nothing more than an idea or a concept, we work closely with entrepreneurs, experts, and researchers to build new companies and translate breakthroughs into the market."
+         data-zh="哪怕只是一个想法或一个概念，我们都会与创业者、专家和研究者紧密合作，共同创立新公司，将突破性创新转化为市场价值。">
+        Starting from nothing more than an idea or a concept, we work closely with entrepreneurs, experts, and researchers to build new companies and translate breakthroughs into the market.
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- PORTFOLIO -->
+<section class="sec sec-alt" id="portfolio">
+  <div class="wrap">
+
+    <!-- Featured carousel -->
+    <div class="fp-header r">
+      <div class="eyebrow" data-en="FEATURED PORTFOLIO" data-zh="核心投资组合">FEATURED PORTFOLIO</div>
+      <h2 class="display-h2"><span data-en="We find and help <em>create.</em>" data-zh="我们发现，更与之<em>共建。</em>">We find and help <em>create.</em></span></h2>
+    </div>
+
+    <div class="fp-stage r d1">
+      <div class="fp-track" id="fpTrack">
+
+        <!-- MetaX -->
+        <div class="fp-slide active">
+          <div class="fp-slide-bg" style="background:linear-gradient(125deg,#001A5C 0%,#0A0A1C 55%,#1A0024 100%)"></div>
+          <div class="fp-slide-scrim"></div>
+          <div class="fp-logo"><img src="assets/logo-metax.png" alt="MetaX"></div>
+          <div class="fp-content">
+            <div class="fp-name">MetaX</div>
+            <p class="fp-desc"
+               data-en="Leading GPU chip company in China, widely used in data centers and AI computing. Founded by top R&D leaders from AMD, we invested before the company was founded."
+               data-zh="中国领先的GPU芯片公司，广泛应用于数据中心与AI计算。由AMD顶尖研发负责人创立，我们在公司成立前即完成投资。">
+              Leading GPU chip company in China, widely used in data centers and AI computing. Founded by top R&amp;D leaders from AMD, we invested before the company was founded.
+            </p>
+            <div class="fp-meta">
+              <div class="fp-meta-item">
+                <span class="fp-meta-label" data-en="Invested" data-zh="投资时间">Invested</span>
+                <span class="fp-meta-val">2019</span>
+              </div>
+              <div class="fp-meta-item">
+                <span class="fp-meta-label" data-en="Initial Round" data-zh="最初轮次">Initial Round</span>
+                <span class="fp-meta-val" data-en="Seed Round" data-zh="种子轮">Seed Round</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Turing Quantum -->
+        <div class="fp-slide">
+          <div class="fp-slide-bg" style="background:linear-gradient(125deg,#001835 0%,#001428 55%,#002830 100%)"></div>
+          <div class="fp-slide-scrim"></div>
+          <div class="fp-logo"><img src="assets/logo-turingq.png" alt="Turing Quantum"></div>
+          <div class="fp-content">
+            <div class="fp-name">Turing Quantum<small>图灵量子</small></div>
+            <p class="fp-desc"
+               data-en="First and leading photonic quantum computing company in China. Founded by a top physics scientist at SJTU, we co-founded the company and helped establish the world's first photonic quantum chip production line."
+               data-zh="中国首家且领先的光子量子计算公司。由上海交大顶尖物理学家创立，我们参与联合创始，协助建立全球首条光子量子芯片量产线。">
+              First and leading photonic quantum computing company in China. Founded by a top physics scientist at SJTU, we co-founded the company and helped establish the world's first photonic quantum chip production line.
+            </p>
+            <div class="fp-meta">
+              <div class="fp-meta-item">
+                <span class="fp-meta-label" data-en="Invested" data-zh="投资时间">Invested</span>
+                <span class="fp-meta-val">2020</span>
+              </div>
+              <div class="fp-meta-item">
+                <span class="fp-meta-label" data-en="Initial Round" data-zh="最初轮次">Initial Round</span>
+                <span class="fp-meta-val" data-en="First Round" data-zh="首轮">First Round</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- StairMed -->
+        <div class="fp-slide">
+          <div class="fp-slide-bg" style="background:linear-gradient(125deg,#0A0A2E 0%,#140028 55%,#001825 100%)"></div>
+          <div class="fp-slide-scrim"></div>
+          <div class="fp-logo"><img src="assets/logo-stairmed.png" alt="StairMed"></div>
+          <div class="fp-content">
+            <div class="fp-name">StairMed</div>
+            <p class="fp-desc"
+               data-en="Leading brain-machine interface company in China with global competitive strength. We were the sole investor in the first round. One of only two invasive BMI clinical trial systems worldwide."
+               data-zh="中国领先的脑机接口公司，具备全球竞争力。我们是首轮唯一投资方。全球仅有两家拥有侵入式BMI临床试验系统的公司之一。">
+              Leading brain-machine interface company in China with global competitive strength. We were the sole investor in the first round. One of only two invasive BMI clinical trial systems worldwide.
+            </p>
+            <div class="fp-meta">
+              <div class="fp-meta-item">
+                <span class="fp-meta-label" data-en="Invested" data-zh="投资时间">Invested</span>
+                <span class="fp-meta-val">2021</span>
+              </div>
+              <div class="fp-meta-item">
+                <span class="fp-meta-label" data-en="Initial Round" data-zh="最初轮次">Initial Round</span>
+                <span class="fp-meta-val" data-en="First Round" data-zh="首轮">First Round</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /fp-track -->
+
+      <div class="fp-nav">
+        <button class="fp-arrow" id="fpPrev" aria-label="Previous">&#8592;</button>
+        <button class="fp-arrow" id="fpNext" aria-label="Next">&#8594;</button>
+      </div>
+    </div>
+
+    <div class="fp-dots" id="fpDots">
+      <div class="fp-dot on"></div>
+      <div class="fp-dot"></div>
+      <div class="fp-dot"></div>
+    </div>
+
+    <!-- Logo wall -->
+    <div style="margin-top:88px" class="r d2">
+      <div class="lw-title" data-en="ALL PORTFOLIOS" data-zh="全部投资组合">ALL PORTFOLIOS</div>
+      <div class="lw-grid">
+        <div class="lw-cell"><img src="assets/logo-metax.png" alt="MetaX"></div>
+        <div class="lw-cell"><img src="assets/logo-turingq.png" alt="Turing Quantum"></div>
+        <div class="lw-cell"><img src="assets/logo-stairmed.png" alt="StairMed"></div>
+        <div class="lw-cell"><span class="lw-mark">Freebeat</span></div>
+        <div class="lw-cell"><span class="lw-mark">San Liang</span></div>
+        <div class="lw-cell"><span class="lw-mark">Jing Mian Tang</span></div>
+        <div class="lw-cell"><span class="lw-mark">Shu Du Feng</span></div>
+        <div class="lw-cell"><span class="lw-mark">Da Shi Xiong</span></div>
+        <div class="lw-cell"><span class="lw-mark">Xiong Da Ye</span></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- TEAM : name + title only -->
+<section class="sec" id="team">
+  <div class="wrap">
+    <div class="team-intro r">
+      <div class="eyebrow" data-en="TEAM" data-zh="团队">TEAM</div>
+      <h2 class="display-h2"><span data-en="The people behind <em>every bet.</em>" data-zh="每一次投资背后的<em>团队。</em>">The people behind <em>every bet.</em></span></h2>
+    </div>
+    <div class="team-grid r d1">
+      <div class="team-cell">
+        <div class="team-name">CHEN Changmin</div>
+        <div class="team-role" data-en="Managing Partner" data-zh="管理合伙人">Managing Partner</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">QI Jicai</div>
+        <div class="team-role" data-en="Partner, Consumer & DeepTech" data-zh="合伙人，消费与硬科技">Partner, Consumer &amp; DeepTech</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">DING Yihan</div>
+        <div class="team-role" data-en="Partner, Technology" data-zh="合伙人，科技方向">Partner, Technology</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">Wenbo LU</div>
+        <div class="team-role" data-en="VP, Consumer & Technology" data-zh="副总裁，消费与科技">VP, Consumer &amp; Technology</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">William YING</div>
+        <div class="team-role" data-en="Investor, Consumer & Technology" data-zh="投资经理，消费与科技">Investor, Consumer &amp; Technology</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">Xinyu HUANG</div>
+        <div class="team-role" data-en="Investor, Enterprise & Frontier Tech" data-zh="投资经理，企业软件与前沿技术">Investor, Enterprise &amp; Frontier Tech</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">Jojo ZHANG</div>
+        <div class="team-role" data-en="Investor, Enterprise Infrastructure" data-zh="投资经理，企业基础设施">Investor, Enterprise Infrastructure</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">Chao LI</div>
+        <div class="team-role" data-en="Investor, Hardware & ESG" data-zh="投资经理，硬件与 ESG">Investor, Hardware &amp; ESG</div>
+      </div>
+      <div class="team-cell">
+        <div class="team-name">Amanda HOU</div>
+        <div class="team-role" data-en="Talent & Recruitment" data-zh="人才招募与咨询">Talent &amp; Recruitment</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hr"></div>
+
+<!-- FOOTER / CONTACT -->
+<footer class="footer" id="contact">
+  <div class="wrap">
+    <div class="footer-top r">
+      <div>
+        <img class="f-logo" src="assets/logo.png" alt="FountainBridge Capital">
+        <div class="f-tagline" data-en="Conviction before consensus forms." data-zh="在共识形成之前，我们已坚定投入。">Conviction before consensus forms.</div>
+      </div>
+      <div>
+        <div class="f-col-title" data-en="NAVIGATE" data-zh="导航">NAVIGATE</div>
+        <ul class="f-links">
+          <li><a href="#philosophy" data-en="Philosophy" data-zh="投资理念">Philosophy</a></li>
+          <li><a href="#portfolio"  data-en="Portfolio"  data-zh="投资组合">Portfolio</a></li>
+          <li><a href="#team"       data-en="Team"       data-zh="团队">Team</a></li>
+          <li><a href="#contact"    data-en="Contact"    data-zh="联系我们">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-col-title" data-en="CONTACT" data-zh="联系方式">CONTACT</div>
+        <div class="f-contacts">
+          <div><div class="f-c-label">Email</div><div class="f-c-val">c@fb-cap.com</div></div>
+          <div><div class="f-c-label" data-en="Tel" data-zh="电话">Tel</div><div class="f-c-val">021 62199027</div></div>
+          <div><div class="f-c-label" data-en="Address" data-zh="地址">Address</div><div class="f-c-val" data-en="Bldg. 24, 91 TianPing Rd., Xuhui, Shanghai" data-zh="上海市徐汇区天平路91弄24号楼">Bldg. 24, 91 TianPing Rd., Xuhui, Shanghai</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="f-copy">© 2026 FountainBridge Capital. All Rights Reserved.</span>
+      <span class="f-copy" style="opacity:.6" data-en="Founded 2019 · Shanghai" data-zh="成立于2019年 · 上海">Founded 2019 · Shanghai</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── LANGUAGE ── */
+let lang='en';
+function setLang(l){
+  lang=l;
+  document.getElementById('btn-en').classList.toggle('on',l==='en');
+  document.getElementById('btn-zh').classList.toggle('on',l==='zh');
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    if(el.id==='heroSlogan' || el.classList.contains('philo-lead')){
+      el.innerHTML = l==='zh' ? el.dataset.zh : el.dataset.en;
+    } else if(el.children.length && el.querySelector('span[data-en]')){
+      const s=el.querySelector('span[data-en]');
+      s.innerHTML = l==='zh' ? s.dataset.zh : s.dataset.en;
+    } else if(!el.children.length){
+      el.textContent = l==='zh' ? (el.dataset.zh||el.dataset.en) : el.dataset.en;
+    }
+  });
+}
+
+/* ── NAV SCROLL ── */
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>nav.classList.toggle('solid',scrollY>40),{passive:true});
+
+/* ── SCROLL REVEAL ── */
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')});
+},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+/* ── FEATURED CAROUSEL ── */
+let cur=0;const total=3;
+const track=document.getElementById('fpTrack');
+const dots=document.querySelectorAll('.fp-dot');
+const slides=document.querySelectorAll('.fp-slide');
+function go(n){
+  cur=((n%total)+total)%total;
+  track.style.transform=`translateX(-${cur*100}%)`;
+  dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+  slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+}
+document.getElementById('fpPrev').addEventListener('click',()=>{go(cur-1);reset()});
+document.getElementById('fpNext').addEventListener('click',()=>{go(cur+1);reset()});
+dots.forEach((d,i)=>d.addEventListener('click',()=>{go(i);reset()}));
+let timer=setInterval(()=>go(cur+1),6000);
+function reset(){clearInterval(timer);timer=setInterval(()=>go(cur+1),6000)}
+const stage=document.querySelector('.fp-stage');
+stage.addEventListener('mouseenter',()=>clearInterval(timer));
+stage.addEventListener('mouseleave',()=>{timer=setInterval(()=>go(cur+1),6000)});
+// touch
+let tx=0;
+track.addEventListener('touchstart',e=>tx=e.touches[0].clientX,{passive:true});
+track.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx;
+  if(Math.abs(dx)>40){go(dx<0?cur+1:cur-1);reset()}
+},{passive:true});
+</script>
+</body>
+</html>
