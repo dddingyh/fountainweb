@@ -91,18 +91,20 @@ button{font-family:inherit}
 /* full-bleed dot wave behind the hero copy */
 /* --vw is set from JS to clientWidth so the full-bleed break-out never
    overflows by the width of the scrollbar (100vw includes it) */
+/* --wave-bottom is set from JS to the top of the stats row, so the wave's
+   lower edge never drops below the "2019 …" numbers */
 #heroWave{
-  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:var(--vw,100vw);height:66%;
+  position:absolute;bottom:var(--wave-bottom,0);left:50%;transform:translateX(-50%);
+  width:var(--vw,100vw);height:58%;
   z-index:0;pointer-events:none;
 }
 /* soft scrim so the field never competes with the copy sitting over it */
 #hero::before{
-  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:var(--vw,100vw);height:66%;z-index:1;pointer-events:none;
+  content:'';position:absolute;bottom:var(--wave-bottom,0);left:50%;transform:translateX(-50%);
+  width:var(--vw,100vw);height:58%;z-index:1;pointer-events:none;
   background:
     linear-gradient(100deg,rgba(252,252,250,.80) 0%,rgba(252,252,250,.34) 42%,rgba(252,252,250,0) 72%),
-    linear-gradient(to top,rgba(252,252,250,.72) 0%,rgba(252,252,250,0) 26%);
+    linear-gradient(to top,rgba(252,252,250,.72) 0%,rgba(252,252,250,0) 22%);
 }
 #hero > *:not(#heroWave){position:relative;z-index:2}
 .hero-kicker{
@@ -266,6 +268,41 @@ section{scroll-margin-top:80px}
 .lg-yr b{font-family:'Geist Mono',monospace;font-size:22px;font-weight:500;letter-spacing:-.02em;display:block}
 .lg-yr span{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--fnt);margin-top:6px;display:block}
 
+/* featured image carousel — full page width */
+.fp{position:relative;margin:56px 0 96px;overflow:hidden;background:var(--ink)}
+.fp-track{display:flex;transition:transform .7s cubic-bezier(.65,.05,.1,1);will-change:transform}
+.fp-slide{position:relative;flex:0 0 100%;min-width:100%;height:clamp(400px,50vw,640px)}
+.fp-bg{position:absolute;inset:0;background-size:cover;background-position:center;transform:scale(1.04);transition:transform 7s ease}
+.fp-slide.active .fp-bg{transform:scale(1)}
+.fp-scrim{position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,rgba(9,9,14,.90) 0%,rgba(9,9,14,.62) 40%,rgba(9,9,14,.18) 72%,rgba(9,9,14,.05) 100%),
+    linear-gradient(0deg,rgba(9,9,14,.72) 0%,rgba(9,9,14,0) 42%);}
+/* gutter matches .wrap so the copy lines up with the rest of the page */
+.fp-body{position:absolute;left:0;bottom:0;z-index:2;width:100%;color:#fff;
+  padding:0 40px clamp(30px,4vw,56px);
+  padding-left:max(40px,calc((100% - 1360px)/2 + 40px));}
+.fp-body > *{max-width:620px}
+.fp-logo{height:30px;margin-bottom:22px}
+.fp-logo img{height:100%;width:auto;filter:brightness(0) invert(1);opacity:.92}
+.fp-sector{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:14px}
+.fp-name{font-size:clamp(30px,3.6vw,50px);font-weight:600;letter-spacing:-.035em;line-height:1;margin-bottom:16px}
+.fp-cn{font-size:.5em;font-weight:400;color:rgba(255,255,255,.55);letter-spacing:0}
+.fp-desc{font-size:clamp(14px,1.15vw,16px);line-height:1.6;color:rgba(255,255,255,.82);margin-bottom:22px}
+.fp-year{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.04em;color:#fff;
+  padding-top:16px;border-top:1px solid rgba(255,255,255,.22);display:inline-block}
+.fp-arrow{position:absolute;top:50%;transform:translateY(-50%);z-index:3;
+  width:46px;height:46px;border:1px solid rgba(255,255,255,.28);border-radius:50%;
+  background:rgba(9,9,14,.30);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  color:#fff;font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .25s,border-color .25s}
+.fp-arrow:hover{background:var(--navy);border-color:var(--navy)}
+.fp-prev{left:24px}.fp-next{right:24px}
+.fp-dots{position:absolute;z-index:3;display:flex;gap:8px;
+  right:max(40px,calc((100% - 1360px)/2 + 40px));bottom:clamp(30px,4vw,56px);}
+.fp-dot{width:26px;height:2px;background:rgba(255,255,255,.32);border-radius:2px;cursor:pointer;transition:background .3s,width .3s}
+.fp-dot.on{background:#fff;width:42px}
+
 /* index of others */
 .idx{margin-top:96px}
 .idx-cap{
@@ -360,6 +397,12 @@ section{scroll-margin-top:80px}
   #hero{padding:140px 22px 0}
   .wrap{padding:0 22px}
   .sec{padding:88px 0}
+  .fp{margin:36px 0 64px}
+  .fp-slide{height:clamp(360px,88vw,520px)}
+  .fp-body{padding:0 22px 30px;padding-left:22px}
+  .fp-dots{right:22px;bottom:30px}
+  .fp-arrow{width:40px;height:40px}
+  .fp-prev{left:14px}.fp-next{right:14px}
   .facts{grid-template-columns:1fr 1fr}
   .fact{padding:22px 0 30px!important;border-right:none!important}
   .facts .fact:nth-child(-n+2){border-bottom:1px solid var(--line)}
@@ -398,10 +441,6 @@ section{scroll-margin-top:80px}
 <!-- ═══════════ HERO ═══════════ -->
 <section id="hero">
   <canvas id="heroWave"></canvas>
-  <div class="hero-kicker">
-    <i></i>
-    <span data-en="Early-Stage Venture · Frontier Technology · Shanghai" data-zh="早期风险投资 · 前沿科技 · 上海">Early-Stage Venture · Frontier Technology · Shanghai</span>
-  </div>
   <h1 class="hero-h1" id="heroH1"
       data-html="1"
       data-en='<span class="ln"><span>Conviction before</span></span><span class="ln"><span><span class="hl">consensus.</span></span></span>'
@@ -493,43 +532,64 @@ section{scroll-margin-top:80px}
          data-zh="我们在最早期阶段投资的部分前沿科技公司 —— 常常是第一个投资方，有时是唯一一个。">
         A selection of frontier-technology companies we backed at the earliest stage — often as the first, and sometimes the only, investor.
       </p>
+    </div>
+  </div>
 
-      <div class="ledger r d1">
-        <!-- MetaX -->
-        <div class="lg-row">
-          <div class="lg-idx">01</div>
-          <div class="lg-logo"><img src="assets/logo-metax.png" alt="MetaX"></div>
-          <div class="lg-main">
-            <div class="lg-name">MetaX</div>
-            <div class="lg-desc" data-en="Leading GPU chip company in China, founded by top R&D leaders from AMD. We invested before the company was founded." data-zh="中国领先的GPU芯片公司，由AMD顶尖研发负责人创立。我们在公司成立前即完成投资。">Leading GPU chip company in China, founded by top R&amp;D leaders from AMD. We invested before the company was founded.</div>
-          </div>
-          <div class="lg-sector" data-en="Semiconductor · AI Compute" data-zh="半导体 · AI 算力">Semiconductor · AI Compute</div>
-          <div class="lg-yr"><b>2019</b><span data-en="Seed" data-zh="种子轮">Seed</span></div>
-        </div>
-        <!-- Turing Quantum -->
-        <div class="lg-row">
-          <div class="lg-idx">02</div>
-          <div class="lg-logo"><img src="assets/logo-turingq.png" alt="Turing Quantum"></div>
-          <div class="lg-main">
-            <div class="lg-name">Turing Quantum <small>图灵量子</small></div>
-            <div class="lg-desc" data-en="China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line." data-zh="中国首家且领先的光子量子计算公司。我们参与联合创始，协助建立全球首条光子量子芯片量产线。">China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line.</div>
-          </div>
-          <div class="lg-sector" data-en="Quantum Computing" data-zh="量子计算">Quantum Computing</div>
-          <div class="lg-yr"><b>2020</b><span data-en="First Round" data-zh="首轮">First Round</span></div>
-        </div>
-        <!-- StairMed -->
-        <div class="lg-row">
-          <div class="lg-idx">03</div>
-          <div class="lg-logo"><img src="assets/logo-stairmed.png" alt="StairMed"></div>
-          <div class="lg-main">
-            <div class="lg-name">StairMed</div>
-            <div class="lg-desc" data-en="A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round." data-zh="具备全球竞争力的领先脑机接口公司。我们是首轮唯一投资方。">A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round.</div>
-          </div>
-          <div class="lg-sector" data-en="Brain-Machine Interface" data-zh="脑机接口">Brain-Machine Interface</div>
-          <div class="lg-yr"><b>2021</b><span data-en="First Round" data-zh="首轮">First Round</span></div>
-        </div>
-      </div>
+  <!-- Featured image carousel — full page width, outside the text grid -->
+  <div class="fp r d1">
+    <div class="fp-track" id="fpTrack">
 
+          <!-- MetaX -->
+          <div class="fp-slide">
+            <div class="fp-bg" style="background-image:url('assets/co-metax.jpg')"></div>
+            <div class="fp-scrim"></div>
+            <div class="fp-body">
+              <div class="fp-logo"><img src="assets/logo-metax.png" alt="MetaX"></div>
+              <div class="fp-sector" data-en="Semiconductor · AI Compute" data-zh="半导体 · AI 算力">Semiconductor · AI Compute</div>
+              <div class="fp-name">MetaX</div>
+              <p class="fp-desc" data-en="Leading GPU chip company in China, founded by top R&D leaders from AMD. We invested before the company was founded." data-zh="中国领先的 GPU 芯片公司，由 AMD 顶尖研发负责人创立。我们在公司成立前即完成投资。">Leading GPU chip company in China, founded by top R&amp;D leaders from AMD. We invested before the company was founded.</p>
+              <div class="fp-year" data-en="Invested 2019 · Seed round" data-zh="投资于 2019 · 种子轮">Invested 2019 · Seed round</div>
+            </div>
+          </div>
+
+          <!-- Turing Quantum -->
+          <div class="fp-slide">
+            <div class="fp-bg" style="background-image:url('assets/co-turing.jpg')"></div>
+            <div class="fp-scrim"></div>
+            <div class="fp-body">
+              <div class="fp-logo"><img src="assets/logo-turingq.png" alt="Turing Quantum"></div>
+              <div class="fp-sector" data-en="Quantum Computing" data-zh="量子计算">Quantum Computing</div>
+              <div class="fp-name" data-html="1"
+                   data-en="Turing Quantum"
+                   data-zh="Turing Quantum<span class='fp-cn'> 图灵量子</span>">Turing Quantum</div>
+              <p class="fp-desc" data-en="China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line." data-zh="中国首家且领先的光子量子计算公司。我们参与联合创始，协助建立全球首条光子量子芯片量产线。">China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line.</p>
+              <div class="fp-year" data-en="Invested 2020 · First round" data-zh="投资于 2020 · 首轮">Invested 2020 · First round</div>
+            </div>
+          </div>
+
+          <!-- StairMed -->
+          <div class="fp-slide">
+            <div class="fp-bg" style="background-image:url('assets/co-stairmed.jpg')"></div>
+            <div class="fp-scrim"></div>
+            <div class="fp-body">
+              <div class="fp-logo"><img src="assets/logo-stairmed.png" alt="StairMed"></div>
+              <div class="fp-sector" data-en="Brain-Machine Interface" data-zh="脑机接口">Brain-Machine Interface</div>
+              <div class="fp-name">StairMed</div>
+              <p class="fp-desc" data-en="A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round." data-zh="具备全球竞争力的领先脑机接口公司。我们是首轮唯一投资方。">A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round.</p>
+              <div class="fp-year" data-en="Invested 2021 · First round" data-zh="投资于 2021 · 首轮">Invested 2021 · First round</div>
+            </div>
+          </div>
+
+        </div>
+
+    <button class="fp-arrow fp-prev" id="fpPrev" aria-label="Previous">&#8592;</button>
+    <button class="fp-arrow fp-next" id="fpNext" aria-label="Next">&#8594;</button>
+    <div class="fp-dots" id="fpDots"></div>
+  </div>
+
+  <div class="wrap sec-grid">
+    <div></div>
+    <div>
       <div class="idx r d2">
         <div class="idx-cap" data-en="Selected portfolio" data-zh="部分投资组合">Selected portfolio</div>
         <div class="idx-grid">
@@ -657,6 +717,52 @@ const cObs=new IntersectionObserver(es=>{
   });
 },{threshold:.4});
 document.querySelectorAll('.cnt').forEach(el=>cObs.observe(el));
+
+/* ── Featured companies carousel ── */
+(function(){
+  const track=document.getElementById('fpTrack');
+  if(!track) return;
+  const slides=[...track.children];
+  const dotsWrap=document.getElementById('fpDots');
+  const total=slides.length;
+  let cur=0, timer=null;
+
+  slides.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='fp-dot'+(i===0?' on':'');
+    d.addEventListener('click',()=>{go(i);restart();});
+    dotsWrap.appendChild(d);
+  });
+  const dots=[...dotsWrap.children];
+
+  function go(n){
+    cur=(n+total)%total;
+    track.style.transform=`translateX(-${cur*100}%)`;
+    dots.forEach((d,i)=>d.classList.toggle('on',i===cur));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+  }
+  function restart(){ clearInterval(timer); timer=setInterval(()=>go(cur+1),6000); }
+
+  document.getElementById('fpPrev').addEventListener('click',()=>{go(cur-1);restart();});
+  document.getElementById('fpNext').addEventListener('click',()=>{go(cur+1);restart();});
+
+  /* touch swipe */
+  let x0=null;
+  track.addEventListener('touchstart',e=>{x0=e.touches[0].clientX;},{passive:true});
+  track.addEventListener('touchend',e=>{
+    if(x0===null) return;
+    const dx=e.changedTouches[0].clientX-x0;
+    if(Math.abs(dx)>40){ go(dx<0?cur+1:cur-1); restart(); }
+    x0=null;
+  },{passive:true});
+
+  /* only autoplay while in view */
+  new IntersectionObserver(es=>{
+    if(es[0].isIntersecting) restart(); else clearInterval(timer);
+  },{threshold:.25}).observe(track);
+
+  go(0);
+})();
 </script>
 
 <!-- ═══════════ HERO DOT WAVE ═══════════
@@ -745,6 +851,12 @@ document.querySelectorAll('.cnt').forEach(el=>cObs.observe(el));
     /* scrollbar-safe viewport width for the full-bleed break-out */
     document.documentElement.style.setProperty('--vw',
       document.documentElement.clientWidth+'px');
+    /* anchor the wave's lower edge to the top of the stats row */
+    const hero=document.getElementById('hero'), facts=hero.querySelector('.facts');
+    if(facts){
+      const gap = hero.getBoundingClientRect().bottom - facts.getBoundingClientRect().top;
+      document.documentElement.style.setProperty('--wave-bottom', Math.max(0,gap)+'px');
+    }
     DPR=Math.min(devicePixelRatio||1,2);
     const r=CV.getBoundingClientRect();
     if(r.width<2||r.height<2) return;
