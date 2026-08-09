@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>FountainBridge Capital — Early-Stage Frontier Technology</title>
+<meta name="description" content="An early-stage venture firm backing frontier technology in China. Conviction before consensus.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ────────────────────────────────
+   TOKENS
+──────────────────────────────── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#FCFCFA;
+  --paper2:#F4F4F0;
+  --ink:#0B0B0E;
+  --ink2:#26262B;
+  --mut:#6A6A72;
+  --fnt:#A8A8AE;
+  --line:#E7E7E1;
+  --navy:#002D99;
+  --navy2:#0B3DC4;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Instrument Sans',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--paper);color:var(--ink);
+  overflow-x:hidden;-webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;font-weight:400;
+}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit}
+::selection{background:var(--navy);color:#fff}
+:focus-visible{outline:2px solid var(--navy);outline-offset:3px}
+.mono{font-family:'Geist Mono',ui-monospace,SFMono-Regular,monospace;letter-spacing:0}
+
+/* ────────────────────────────────
+   NAV
+──────────────────────────────── */
+.nav{
+  position:fixed;inset:0 0 auto 0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 40px;
+  border-bottom:1px solid transparent;
+  transition:padding .35s var(--ease),background .35s,border-color .35s;
+}
+.nav.solid{
+  padding:14px 40px;
+  background:rgba(252,252,250,.82);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-color:var(--line);
+}
+.nav-logo img{height:24px;width:auto;filter:brightness(0)}
+.nav-logo{transition:opacity .2s}
+.nav-logo:hover{opacity:.55}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{
+  font-family:'Geist Mono',monospace;
+  font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--mut);transition:color .2s;position:relative;
+}
+.nav-links a::before{
+  content:'';position:absolute;left:0;bottom:-5px;height:1px;width:100%;
+  background:var(--ink);transform:scaleX(0);transform-origin:right;
+  transition:transform .3s var(--ease);
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::before{transform:scaleX(1);transform-origin:left}
+.lang{display:flex;align-items:center;font-family:'Geist Mono',monospace;font-size:11.5px}
+.lang button{
+  background:none;border:none;cursor:pointer;padding:4px 6px;
+  font-family:inherit;font-size:inherit;color:var(--fnt);transition:color .2s;
+}
+.lang button.on{color:var(--ink)}
+.lang .sep{color:var(--line)}
+
+/* ────────────────────────────────
+   HERO
+──────────────────────────────── */
+#hero{
+  position:relative;
+  min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;
+  max-width:1360px;margin:0 auto;padding:180px 40px 0;
+}
+/* full-bleed dot wave behind the hero copy */
+/* --vw is set from JS to clientWidth so the full-bleed break-out never
+   overflows by the width of the scrollbar (100vw includes it) */
+#heroWave{
+  position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:var(--vw,100vw);height:66%;
+  z-index:0;pointer-events:none;
+}
+/* soft scrim so the field never competes with the copy sitting over it */
+#hero::before{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:var(--vw,100vw);height:66%;z-index:1;pointer-events:none;
+  background:
+    linear-gradient(100deg,rgba(252,252,250,.80) 0%,rgba(252,252,250,.34) 42%,rgba(252,252,250,0) 72%),
+    linear-gradient(to top,rgba(252,252,250,.72) 0%,rgba(252,252,250,0) 26%);
+}
+#hero > *:not(#heroWave){position:relative;z-index:2}
+.hero-kicker{
+  font-family:'Geist Mono',monospace;
+  font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);
+  display:flex;align-items:center;gap:14px;margin-bottom:40px;
+  opacity:0;animation:fadeUp .8s var(--ease) forwards .15s;
+}
+.hero-kicker i{display:block;width:8px;height:8px;border-radius:50%;background:var(--navy);font-style:normal}
+.hero-h1{
+  font-size:clamp(58px,10.8vw,176px);
+  font-weight:620;font-variation-settings:'wght' 620;
+  letter-spacing:-.052em;line-height:.94;
+  max-width:12ch;margin-bottom:64px;
+}
+.hero-h1 .ln{display:block;overflow:hidden;padding-bottom:.12em;margin-bottom:-.12em}
+.hero-h1 .ln > span{display:block;transform:translateY(110%);animation:lift 1s var(--ease) forwards}
+.hero-h1 .ln:nth-child(1) span{animation-delay:.25s}
+.hero-h1 .ln:nth-child(2) span{animation-delay:.38s}
+.hl{position:relative;white-space:nowrap}
+.hl::after{
+  content:'';position:absolute;left:0;bottom:.02em;height:.045em;width:100%;
+  background:var(--navy);transform:scaleX(0);transform-origin:left;
+  animation:draw 1s var(--ease) forwards 1.35s;
+}
+.hero-foot{
+  display:flex;justify-content:space-between;align-items:flex-end;gap:40px;
+  margin-bottom:72px;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .9s var(--ease) forwards .7s;
+}
+.hero-sub{
+  font-size:clamp(17px,1.6vw,21px);color:var(--mut);line-height:1.55;max-width:480px;
+}
+.hero-cta{
+  display:inline-flex;align-items:center;gap:12px;
+  font-size:15px;font-weight:550;color:var(--ink);
+  padding-bottom:6px;border-bottom:1px solid var(--ink);
+  transition:color .25s,border-color .25s;white-space:nowrap;cursor:pointer;
+  background:none;border-top:none;border-left:none;border-right:none;
+}
+.hero-cta .ar{transition:transform .3s var(--ease)}
+.hero-cta:hover{color:var(--navy);border-color:var(--navy)}
+.hero-cta:hover .ar{transform:translateX(5px)}
+/* fact strip */
+.facts{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--ink);
+  opacity:0;animation:fadeUp .9s var(--ease) forwards .9s;
+}
+.fact{padding:26px 32px 44px 0;border-right:1px solid var(--line)}
+.fact:last-child{border-right:none}
+.fact:not(:first-child){padding-left:32px}
+.fact-num{
+  font-family:'Geist Mono',monospace;
+  font-size:clamp(28px,3vw,40px);font-weight:500;letter-spacing:-.03em;line-height:1;
+}
+.fact-label{
+  font-family:'Geist Mono',monospace;
+  font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--fnt);margin-top:10px;
+}
+
+/* ────────────────────────────────
+   SECTION SCAFFOLD (left rail)
+──────────────────────────────── */
+section{scroll-margin-top:80px}
+.sec{padding:140px 0}
+.wrap{max-width:1360px;margin:0 auto;padding:0 40px}
+.sec-grid{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start}
+.rail{
+  position:sticky;top:110px;
+  font-family:'Geist Mono',monospace;
+  font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);
+  display:flex;align-items:center;gap:12px;
+}
+.rail::after{content:'';flex:1;height:1px;background:var(--line)}
+.rail b{font-weight:500;color:var(--navy)}
+
+/* ────────────────────────────────
+   APPROACH
+──────────────────────────────── */
+.manifesto{
+  font-size:clamp(26px,3.5vw,44px);
+  font-weight:480;font-variation-settings:'wght' 480;
+  letter-spacing:-.032em;line-height:1.24;
+  max-width:21ch;margin-bottom:96px;color:var(--ink);
+}
+.manifesto em{font-style:normal;color:var(--navy)}
+.principles{border-top:1px solid var(--ink)}
+.principle{
+  display:grid;grid-template-columns:80px 1fr 1.2fr;gap:40px;align-items:baseline;
+  padding:38px 0;border-bottom:1px solid var(--line);
+  transition:background .3s;
+}
+.principle:hover{background:rgba(0,45,153,.02)}
+.p-num{
+  font-family:'Geist Mono',monospace;font-size:12px;color:var(--fnt);
+  transition:color .3s;
+}
+.principle:hover .p-num{color:var(--navy)}
+.p-h{font-size:clamp(20px,2vw,26px);font-weight:590;letter-spacing:-.03em;line-height:1.2}
+.p-p{font-size:15.5px;color:var(--mut);line-height:1.62;max-width:52ch}
+
+/* ────────────────────────────────
+   BAND
+──────────────────────────────── */
+.band{position:relative;min-height:72vh;display:flex;align-items:center;overflow:hidden}
+.band-img{
+  position:absolute;inset:-4% 0;
+  background:url('assets/hero-bg.jpg') center/cover no-repeat;
+  transform:scale(1.05);
+}
+.band-overlay{position:absolute;inset:0;background:linear-gradient(92deg,rgba(6,9,20,.84) 0%,rgba(6,9,20,.52) 55%,rgba(6,9,20,.32) 100%)}
+.band-content{position:relative;z-index:2;max-width:1360px;margin:0 auto;padding:0 40px;width:100%}
+.band-kicker{
+  font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:rgba(255,255,255,.6);
+  display:flex;align-items:center;gap:14px;margin-bottom:32px;
+}
+.band-kicker i{display:block;width:8px;height:8px;border-radius:50%;background:#fff;opacity:.7;font-style:normal}
+.band-h{
+  font-size:clamp(38px,5.8vw,88px);font-weight:600;letter-spacing:-.045em;
+  line-height:1.02;color:#fff;max-width:14ch;
+}
+.band-h em{font-style:normal;color:rgba(255,255,255,.5)}
+
+/* ────────────────────────────────
+   COMPANIES — ledger
+──────────────────────────────── */
+.co-lead{
+  font-size:clamp(17px,1.6vw,20px);color:var(--mut);line-height:1.6;
+  max-width:52ch;margin-bottom:72px;
+}
+.ledger{border-top:1px solid var(--ink)}
+.lg-row{
+  display:grid;
+  grid-template-columns:64px 200px 1fr 150px 90px;
+  gap:36px;align-items:center;
+  padding:44px 0;border-bottom:1px solid var(--line);
+  position:relative;transition:background .3s;
+}
+.lg-row::before{
+  content:'';position:absolute;left:-40px;top:0;bottom:0;width:2px;
+  background:var(--navy);transform:scaleY(0);transform-origin:top;
+  transition:transform .35s var(--ease);
+}
+.lg-row:hover{background:rgba(0,45,153,.02)}
+.lg-row:hover::before{transform:scaleY(1)}
+.lg-idx{font-family:'Geist Mono',monospace;font-size:12px;color:var(--fnt)}
+.lg-logo{display:flex;align-items:center;height:40px}
+.lg-logo img{max-height:36px;max-width:170px;width:auto;object-fit:contain}
+.lg-main{max-width:520px}
+.lg-name{font-size:24px;font-weight:600;letter-spacing:-.03em;line-height:1.05;margin-bottom:9px}
+.lg-name small{font-size:15px;font-weight:400;color:var(--fnt);margin-left:8px;letter-spacing:0}
+.lg-desc{font-size:14.5px;color:var(--mut);line-height:1.58}
+.lg-sector{
+  font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--mut);line-height:1.7;
+}
+.lg-yr{text-align:right}
+.lg-yr b{font-family:'Geist Mono',monospace;font-size:22px;font-weight:500;letter-spacing:-.02em;display:block}
+.lg-yr span{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--fnt);margin-top:6px;display:block}
+
+/* index of others */
+.idx{margin-top:96px}
+.idx-cap{
+  font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--fnt);margin-bottom:28px;
+  display:flex;align-items:center;gap:12px;
+}
+.idx-cap::after{content:'';flex:1;height:1px;background:var(--line)}
+.idx-grid{display:grid;grid-template-columns:repeat(3,1fr);column-gap:56px}
+.idx-it{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  padding:19px 0;border-bottom:1px solid var(--line);
+  font-size:18px;font-weight:550;letter-spacing:-.02em;
+  transition:color .2s;
+}
+.idx-it:hover{color:var(--navy)}
+.idx-it span{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--fnt);font-weight:400}
+
+/* ────────────────────────────────
+   TEAM
+──────────────────────────────── */
+.sec-team{background:var(--paper2)}
+.team-lead{
+  font-size:clamp(17px,1.6vw,20px);color:var(--mut);line-height:1.6;
+  max-width:50ch;margin-bottom:72px;
+}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--ink)}
+.tm{
+  padding:30px 28px 30px 0;border-bottom:1px solid var(--line);
+}
+.tm:nth-child(3n+2),.tm:nth-child(3n){padding-left:28px;border-left:1px solid var(--line)}
+.tm-name{font-size:20px;font-weight:600;letter-spacing:-.025em;margin-bottom:8px}
+.tm-role{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.04em;color:var(--mut);line-height:1.55}
+
+/* ────────────────────────────────
+   FOOTER
+──────────────────────────────── */
+.footer{background:var(--ink);color:#fff;padding:104px 0 40px}
+.f-state{
+  font-size:clamp(34px,5vw,64px);font-weight:600;letter-spacing:-.045em;line-height:1.02;
+  max-width:14ch;margin-bottom:88px;
+}
+.f-state em{font-style:normal;color:rgba(255,255,255,.45)}
+.f-grid{display:grid;grid-template-columns:2fr 1fr 1.4fr;gap:56px;margin-bottom:88px}
+.f-logo img{height:22px;width:auto;margin-bottom:26px}
+.f-note{font-size:14.5px;color:rgba(255,255,255,.55);line-height:1.6;max-width:30ch}
+.f-cap{
+  font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.07em;
+  text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:24px;
+}
+.f-links{list-style:none;display:flex;flex-direction:column;gap:13px}
+.f-links a{font-size:15px;color:rgba(255,255,255,.72);transition:color .2s}
+.f-links a:hover{color:#fff}
+.f-c{display:flex;flex-direction:column;gap:18px}
+.f-cl{font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:rgba(255,255,255,.38);margin-bottom:5px}
+.f-cv{font-size:15px;color:rgba(255,255,255,.78)}
+.f-bottom{
+  padding-top:28px;border-top:1px solid rgba(255,255,255,.12);
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+  font-family:'Geist Mono',monospace;font-size:11.5px;color:rgba(255,255,255,.42);
+}
+
+/* ────────────────────────────────
+   MOTION
+──────────────────────────────── */
+@keyframes lift{to{transform:translateY(0)}}
+@keyframes draw{to{transform:scaleX(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+.r{opacity:0;transform:translateY(28px);transition:opacity .85s var(--ease),transform .85s var(--ease)}
+.r.v{opacity:1;transform:translateY(0)}
+.r.d1{transition-delay:.08s}.r.d2{transition-delay:.16s}.r.d3{transition-delay:.24s}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
+  .hero-h1 .ln span{transform:none}
+  .hl::after{transform:scaleX(1)}
+  .r{opacity:1;transform:none}
+}
+
+/* ────────────────────────────────
+   RESPONSIVE
+──────────────────────────────── */
+@media(max-width:1024px){
+  .sec-grid{grid-template-columns:1fr;gap:36px}
+  .rail{position:static}
+  .lg-row{grid-template-columns:48px 150px 1fr 90px;gap:24px}
+  .lg-sector{display:none}
+}
+@media(max-width:820px){
+  .nav{padding:16px 22px}
+  .nav.solid{padding:12px 22px}
+  .nav-links{display:none}
+  #hero{padding:140px 22px 0}
+  .wrap{padding:0 22px}
+  .sec{padding:88px 0}
+  .facts{grid-template-columns:1fr 1fr}
+  .fact{padding:22px 0 30px!important;border-right:none!important}
+  .facts .fact:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .lg-row{grid-template-columns:1fr;gap:16px;padding:34px 0}
+  .lg-row::before{left:-22px}
+  .lg-idx{display:none}
+  .lg-yr{text-align:left}
+  .lg-yr b{display:inline}
+  .lg-yr span{display:inline;margin-left:10px}
+  .idx-grid{grid-template-columns:1fr}
+  .team-grid{grid-template-columns:1fr}
+  .tm{padding:24px 0!important;border-left:none!important}
+  .f-grid{grid-template-columns:1fr;gap:44px}
+  .band{min-height:56vh}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav class="nav" id="nav">
+  <a class="nav-logo" href="#hero"><img src="assets/logo.png" alt="FountainBridge Capital"></a>
+  <ul class="nav-links">
+    <li><a href="#approach"  data-en="Approach"  data-zh="投资理念">Approach</a></li>
+    <li><a href="#companies" data-en="Companies" data-zh="投资组合">Companies</a></li>
+    <li><a href="#team"      data-en="Team"      data-zh="团队">Team</a></li>
+    <li><a href="#contact"   data-en="Contact"   data-zh="联系我们">Contact</a></li>
+  </ul>
+  <div class="lang">
+    <button id="btn-en" class="on" onclick="setLang('en')">EN</button>
+    <span class="sep">/</span>
+    <button id="btn-zh" onclick="setLang('zh')">中</button>
+  </div>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section id="hero">
+  <canvas id="heroWave"></canvas>
+  <div class="hero-kicker">
+    <i></i>
+    <span data-en="Early-Stage Venture · Frontier Technology · Shanghai" data-zh="早期风险投资 · 前沿科技 · 上海">Early-Stage Venture · Frontier Technology · Shanghai</span>
+  </div>
+  <h1 class="hero-h1" id="heroH1"
+      data-html="1"
+      data-en='<span class="ln"><span>Conviction before</span></span><span class="ln"><span><span class="hl">consensus.</span></span></span>'
+      data-zh='<span class="ln"><span>先于共识，</span></span><span class="ln"><span><span class="hl">下注未来。</span></span></span>'>
+    <span class="ln"><span>Conviction before</span></span><span class="ln"><span><span class="hl">consensus.</span></span></span>
+  </h1>
+  <div class="hero-foot">
+    <p class="hero-sub"
+       data-en="We back founders building frontier technology — writing the first check, often before the company exists."
+       data-zh="我们支持构建前沿科技的创始人 —— 写下第一张支票，往往在公司成立之前。">
+      We back founders building frontier technology — writing the first check, often before the company exists.
+    </p>
+    <button class="hero-cta" onclick="document.getElementById('companies').scrollIntoView({behavior:'smooth'})">
+      <span data-en="View companies" data-zh="查看投资组合">View companies</span><span class="ar">→</span>
+    </button>
+  </div>
+  <div class="facts">
+    <div class="fact">
+      <div class="fact-num">2019</div>
+      <div class="fact-label" data-en="Founded" data-zh="成立年份">Founded</div>
+    </div>
+    <div class="fact">
+      <div class="fact-num"><span class="cnt" data-count="50">0</span>+</div>
+      <div class="fact-label" data-en="Portfolio companies" data-zh="投资组合公司">Portfolio companies</div>
+    </div>
+    <div class="fact">
+      <div class="fact-num"><span class="cnt" data-count="83">0</span>%</div>
+      <div class="fact-label" data-en="First-round or lead" data-zh="首轮或领投">First-round or lead</div>
+    </div>
+    <div class="fact">
+      <div class="fact-num">$<span class="cnt" data-count="3">0</span>B+</div>
+      <div class="fact-label" data-en="Follow-on capital raised" data-zh="后续融资总额">Follow-on capital raised</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ APPROACH ═══════════ -->
+<section class="sec" id="approach">
+  <div class="wrap sec-grid">
+    <div class="rail"><b>01</b><span data-en="Approach" data-zh="投资理念">Approach</span></div>
+    <div>
+      <p class="manifesto r" data-html="1"
+         data-en="FountainBridge is an early-stage venture firm that starts from <em>an idea</em> — working with entrepreneurs, experts, and researchers to translate breakthroughs into companies."
+         data-zh="FountainBridge 是一家从<em>一个想法</em>开始的早期风险投资机构 —— 与创业者、专家和研究者共同将突破性创新转化为公司。">
+        FountainBridge is an early-stage venture firm that starts from <em>an idea</em> — working with entrepreneurs, experts, and researchers to translate breakthroughs into companies.
+      </p>
+      <div class="principles r d1">
+        <div class="principle">
+          <div class="p-num">01</div>
+          <div class="p-h" data-en="We write the first check." data-zh="我们写下第一张支票。">We write the first check.</div>
+          <div class="p-p" data-en="We are not afraid to be first. The majority of our investments are first-round or lead positions, made when the technology is still doubted." data-zh="我们不惧成为第一个出手的人。绝大多数投资为首轮或领投，在技术仍受质疑时完成。">We are not afraid to be first. The majority of our investments are first-round or lead positions, made when the technology is still doubted.</div>
+        </div>
+        <div class="principle">
+          <div class="p-num">02</div>
+          <div class="p-h" data-en="We build alongside founders." data-zh="我们与创始人共建。">We build alongside founders.</div>
+          <div class="p-p" data-en="We have incubated and co-founded more than ten companies — many before they were formally founded." data-zh="我们已孵化并联合创办超过十家公司 —— 许多在正式成立之前就已参与。">We have incubated and co-founded more than ten companies — many before they were formally founded.</div>
+        </div>
+        <div class="principle">
+          <div class="p-num">03</div>
+          <div class="p-h" data-en="We hold conviction to the end." data-zh="我们坚定持有至终点。">We hold conviction to the end.</div>
+          <div class="p-p" data-en="We back frontier technology early and stay through the long arc — from lab bench to the public markets." data-zh="我们在早期投入前沿科技，并陪伴其完整旅程 —— 从实验室走向公开市场。">We back frontier technology early and stay through the long arc — from lab bench to the public markets.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ BAND ═══════════ -->
+<section class="band">
+  <div class="band-img"></div>
+  <div class="band-overlay"></div>
+  <div class="band-content">
+    <div class="band-kicker r"><i></i><span data-en="Since 2019" data-zh="自 2019 年">Since 2019</span></div>
+    <h2 class="band-h r d1" data-html="1"
+        data-en="We invest before the<br>world <em>believes.</em>"
+        data-zh="我们在世界相信之前，<br><em>已然下注。</em>">
+      We invest before the<br>world <em>believes.</em>
+    </h2>
+  </div>
+</section>
+
+<!-- ═══════════ COMPANIES ═══════════ -->
+<section class="sec" id="companies">
+  <div class="wrap sec-grid">
+    <div class="rail"><b>02</b><span data-en="Companies" data-zh="投资组合">Companies</span></div>
+    <div>
+      <p class="co-lead r"
+         data-en="A selection of frontier-technology companies we backed at the earliest stage — often as the first, and sometimes the only, investor."
+         data-zh="我们在最早期阶段投资的部分前沿科技公司 —— 常常是第一个投资方，有时是唯一一个。">
+        A selection of frontier-technology companies we backed at the earliest stage — often as the first, and sometimes the only, investor.
+      </p>
+
+      <div class="ledger r d1">
+        <!-- MetaX -->
+        <div class="lg-row">
+          <div class="lg-idx">01</div>
+          <div class="lg-logo"><img src="assets/logo-metax.png" alt="MetaX"></div>
+          <div class="lg-main">
+            <div class="lg-name">MetaX</div>
+            <div class="lg-desc" data-en="Leading GPU chip company in China, founded by top R&D leaders from AMD. We invested before the company was founded." data-zh="中国领先的GPU芯片公司，由AMD顶尖研发负责人创立。我们在公司成立前即完成投资。">Leading GPU chip company in China, founded by top R&amp;D leaders from AMD. We invested before the company was founded.</div>
+          </div>
+          <div class="lg-sector" data-en="Semiconductor · AI Compute" data-zh="半导体 · AI 算力">Semiconductor · AI Compute</div>
+          <div class="lg-yr"><b>2019</b><span data-en="Seed" data-zh="种子轮">Seed</span></div>
+        </div>
+        <!-- Turing Quantum -->
+        <div class="lg-row">
+          <div class="lg-idx">02</div>
+          <div class="lg-logo"><img src="assets/logo-turingq.png" alt="Turing Quantum"></div>
+          <div class="lg-main">
+            <div class="lg-name">Turing Quantum <small>图灵量子</small></div>
+            <div class="lg-desc" data-en="China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line." data-zh="中国首家且领先的光子量子计算公司。我们参与联合创始，协助建立全球首条光子量子芯片量产线。">China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line.</div>
+          </div>
+          <div class="lg-sector" data-en="Quantum Computing" data-zh="量子计算">Quantum Computing</div>
+          <div class="lg-yr"><b>2020</b><span data-en="First Round" data-zh="首轮">First Round</span></div>
+        </div>
+        <!-- StairMed -->
+        <div class="lg-row">
+          <div class="lg-idx">03</div>
+          <div class="lg-logo"><img src="assets/logo-stairmed.png" alt="StairMed"></div>
+          <div class="lg-main">
+            <div class="lg-name">StairMed</div>
+            <div class="lg-desc" data-en="A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round." data-zh="具备全球竞争力的领先脑机接口公司。我们是首轮唯一投资方。">A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round.</div>
+          </div>
+          <div class="lg-sector" data-en="Brain-Machine Interface" data-zh="脑机接口">Brain-Machine Interface</div>
+          <div class="lg-yr"><b>2021</b><span data-en="First Round" data-zh="首轮">First Round</span></div>
+        </div>
+      </div>
+
+      <div class="idx r d2">
+        <div class="idx-cap" data-en="Selected portfolio" data-zh="部分投资组合">Selected portfolio</div>
+        <div class="idx-grid">
+          <div class="idx-it">MetaX <span data-en="Semiconductor" data-zh="半导体">Semiconductor</span></div>
+          <div class="idx-it">Turing Quantum <span data-en="Quantum" data-zh="量子计算">Quantum</span></div>
+          <div class="idx-it">StairMed <span data-en="BMI" data-zh="脑机接口">BMI</span></div>
+          <div class="idx-it">Freebeat <span data-en="Technology" data-zh="科技">Technology</span></div>
+          <div class="idx-it">San Liang <span data-en="Consumer" data-zh="消费">Consumer</span></div>
+          <div class="idx-it">Jing Mian Tang <span data-en="Consumer" data-zh="消费">Consumer</span></div>
+          <div class="idx-it">Shu Du Feng <span data-en="Food" data-zh="餐饮">Food</span></div>
+          <div class="idx-it">Da Shi Xiong <span data-en="Food" data-zh="餐饮">Food</span></div>
+          <div class="idx-it">Xiong Da Ye <span data-en="Food" data-zh="餐饮">Food</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ TEAM ═══════════ -->
+<section class="sec sec-team" id="team">
+  <div class="wrap sec-grid">
+    <div class="rail"><b>03</b><span data-en="Team" data-zh="团队">Team</span></div>
+    <div>
+      <p class="team-lead r"
+         data-en="A team with complementary expertise across frontier technology, built over a decade of early-stage investing in China."
+         data-zh="一支在前沿科技领域优势互补的团队，在中国早期投资中积累了十余年经验。">
+        A team with complementary expertise across frontier technology, built over a decade of early-stage investing in China.
+      </p>
+      <div class="team-grid r d1">
+        <div class="tm"><div class="tm-name">CHEN Changmin</div><div class="tm-role" data-en="Managing Partner" data-zh="管理合伙人">Managing Partner</div></div>
+        <div class="tm"><div class="tm-name">QI Jicai</div><div class="tm-role" data-en="Partner, Consumer &amp; DeepTech" data-zh="合伙人，消费与硬科技">Partner, Consumer &amp; DeepTech</div></div>
+        <div class="tm"><div class="tm-name">DING Yihan</div><div class="tm-role" data-en="Partner, Technology" data-zh="合伙人，科技方向">Partner, Technology</div></div>
+        <div class="tm"><div class="tm-name">Wenbo LU</div><div class="tm-role" data-en="VP, Consumer &amp; Technology" data-zh="副总裁，消费与科技">VP, Consumer &amp; Technology</div></div>
+        <div class="tm"><div class="tm-name">William YING</div><div class="tm-role" data-en="Investor, Consumer &amp; Technology" data-zh="投资经理，消费与科技">Investor, Consumer &amp; Technology</div></div>
+        <div class="tm"><div class="tm-name">Xinyu HUANG</div><div class="tm-role" data-en="Investor, Enterprise &amp; Frontier Tech" data-zh="投资经理，企业软件与前沿技术">Investor, Enterprise &amp; Frontier Tech</div></div>
+        <div class="tm"><div class="tm-name">Jojo ZHANG</div><div class="tm-role" data-en="Investor, Enterprise Infrastructure" data-zh="投资经理，企业基础设施">Investor, Enterprise Infrastructure</div></div>
+        <div class="tm"><div class="tm-name">Chao LI</div><div class="tm-role" data-en="Investor, Hardware &amp; ESG" data-zh="投资经理，硬件与 ESG">Investor, Hardware &amp; ESG</div></div>
+        <div class="tm"><div class="tm-name">Amanda HOU</div><div class="tm-role" data-en="Talent &amp; Recruitment" data-zh="人才招募与咨询">Talent &amp; Recruitment</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="footer" id="contact">
+  <div class="wrap">
+    <h2 class="f-state r" data-html="1"
+        data-en="The next breakthrough<br>is already <em>being built.</em>"
+        data-zh="下一个突破，<br><em>已在路上。</em>">
+      The next breakthrough<br>is already <em>being built.</em>
+    </h2>
+    <div class="f-grid">
+      <div>
+        <div class="f-logo"><img src="assets/logo.png" alt="FountainBridge Capital"></div>
+        <p class="f-note" data-en="An early-stage venture firm backing frontier technology. Founded 2019, Shanghai." data-zh="一家支持前沿科技的早期风险投资机构。2019年成立于上海。">An early-stage venture firm backing frontier technology. Founded 2019, Shanghai.</p>
+      </div>
+      <div>
+        <div class="f-cap" data-en="Navigate" data-zh="导航">Navigate</div>
+        <ul class="f-links">
+          <li><a href="#approach"  data-en="Approach"  data-zh="投资理念">Approach</a></li>
+          <li><a href="#companies" data-en="Companies" data-zh="投资组合">Companies</a></li>
+          <li><a href="#team"      data-en="Team"      data-zh="团队">Team</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="f-cap" data-en="Contact" data-zh="联系方式">Contact</div>
+        <div class="f-c">
+          <div><div class="f-cl">Email</div><div class="f-cv">c@fb-cap.com</div></div>
+          <div><div class="f-cl" data-en="Tel" data-zh="电话">Tel</div><div class="f-cv">021 62199027</div></div>
+          <div><div class="f-cl" data-en="Address" data-zh="地址">Address</div><div class="f-cv" data-en="Bldg. 24, 91 TianPing Rd., Xuhui, Shanghai" data-zh="上海市徐汇区天平路91弄24号楼">Bldg. 24, 91 TianPing Rd., Xuhui, Shanghai</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="f-bottom">
+      <span>© 2026 FountainBridge Capital</span>
+      <span data-en="Founded 2019 · Shanghai" data-zh="成立于2019年 · 上海">Founded 2019 · Shanghai</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── Language toggle ── */
+let lang='en';
+function setLang(l){
+  lang=l;
+  document.documentElement.lang = l==='zh' ? 'zh-CN' : 'en';
+  document.getElementById('btn-en').classList.toggle('on',l==='en');
+  document.getElementById('btn-zh').classList.toggle('on',l==='zh');
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    const val = l==='zh' ? (el.dataset.zh||el.dataset.en) : el.dataset.en;
+    if(el.dataset.html==='1'){ el.innerHTML = val; }
+    else if(!el.children.length){ el.textContent = val; }
+  });
+}
+
+/* ── Nav ── */
+const nav=document.getElementById('nav');
+let navTick=false;
+window.addEventListener('scroll',()=>{
+  if(navTick)return;navTick=true;
+  requestAnimationFrame(()=>{nav.classList.toggle('solid',scrollY>24);navTick=false});
+},{passive:true});
+
+/* ── Scroll reveal ── */
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const obs=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('v');obs.unobserve(e.target)}});
+},{threshold:.08});
+document.querySelectorAll('.r').forEach(el=>obs.observe(el));
+
+/* ── Counters ── */
+const fmt=n=>Math.round(n).toString();
+const cObs=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(!e.isIntersecting)return;
+    cObs.unobserve(e.target);
+    const el=e.target,target=+el.dataset.count;
+    if(reduce){el.textContent=fmt(target);return}
+    const t0=performance.now(),dur=1400;
+    (function step(t){
+      const p=Math.min((t-t0)/dur,1),ease=1-Math.pow(1-p,4);
+      el.textContent=fmt(target*ease);
+      if(p<1)requestAnimationFrame(step);
+    })(t0);
+  });
+},{threshold:.4});
+document.querySelectorAll('.cnt').forEach(el=>cObs.observe(el));
+</script>
+
+<!-- ═══════════ HERO DOT WAVE ═══════════
+     A plane of points whose height comes from layered simplex noise (fBm),
+     viewed through a narrow-angle perspective camera. Constants below are
+     the tuned values; nothing here needs configuring at runtime.
+-->
+<script>
+(function(){
+  const CV=document.getElementById('heroWave');
+  if(!CV) return;
+  const ctx=CV.getContext('2d');
+
+  /* tuned settings */
+  const COLOR='154,154,162',            // #9A9AA2
+        COLS=68, ROWS=66,
+        AMP=0.50, SPEED=0.7, FREQ=0.40,
+        OCT=3, ROUGH=0.30, DRIFT=0.14,
+        DOT=1.8, FOV=10, FADE=0.30,
+        EYE=[4,0.9,6.6],
+        SPANX=2.0, SPANZ=1.5;
+
+  /* ── 3D simplex noise (Gustavson / Wagner, public domain) ── */
+  function Simplex(r){
+    r=r||Math;
+    this.p=new Uint8Array(256);this.perm=new Uint8Array(512);this.pm=new Uint8Array(512);
+    for(let i=0;i<256;i++)this.p[i]=i;
+    for(let i=255;i>0;i--){const n=(i+1)*r.random()|0,q=this.p[i];this.p[i]=this.p[n];this.p[n]=q;}
+    for(let i=0;i<512;i++){this.perm[i]=this.p[i&255];this.pm[i]=this.perm[i]%12;}
+  }
+  const G3=new Float32Array([1,1,0,-1,1,0,1,-1,0,-1,-1,0,1,0,1,-1,0,1,1,0,-1,-1,0,-1,0,1,1,0,-1,1,0,1,-1,0,-1,-1]);
+  Simplex.prototype.n3=function(xin,yin,zin){
+    const perm=this.perm,pm=this.pm,F=1/3,G=1/6;
+    let n0,n1,n2,n3;
+    const s=(xin+yin+zin)*F;
+    const i=Math.floor(xin+s),j=Math.floor(yin+s),k=Math.floor(zin+s);
+    const t=(i+j+k)*G,x0=xin-(i-t),y0=yin-(j-t),z0=zin-(k-t);
+    let i1,j1,k1,i2,j2,k2;
+    if(x0>=y0){
+      if(y0>=z0){i1=1;j1=0;k1=0;i2=1;j2=1;k2=0;}
+      else if(x0>=z0){i1=1;j1=0;k1=0;i2=1;j2=0;k2=1;}
+      else{i1=0;j1=0;k1=1;i2=1;j2=0;k2=1;}
+    }else{
+      if(y0<z0){i1=0;j1=0;k1=1;i2=0;j2=1;k2=1;}
+      else if(x0<z0){i1=0;j1=1;k1=0;i2=0;j2=1;k2=1;}
+      else{i1=0;j1=1;k1=0;i2=1;j2=1;k2=0;}
+    }
+    const x1=x0-i1+G,y1=y0-j1+G,z1=z0-k1+G;
+    const x2=x0-i2+2*G,y2=y0-j2+2*G,z2=z0-k2+2*G;
+    const x3=x0-1+3*G,y3=y0-1+3*G,z3=z0-1+3*G;
+    const ii=i&255,jj=j&255,kk=k&255;let g;
+    let t0=.6-x0*x0-y0*y0-z0*z0;if(t0<0)n0=0;else{g=pm[ii+perm[jj+perm[kk]]]*3;t0*=t0;n0=t0*t0*(G3[g]*x0+G3[g+1]*y0+G3[g+2]*z0);}
+    let t1=.6-x1*x1-y1*y1-z1*z1;if(t1<0)n1=0;else{g=pm[ii+i1+perm[jj+j1+perm[kk+k1]]]*3;t1*=t1;n1=t1*t1*(G3[g]*x1+G3[g+1]*y1+G3[g+2]*z1);}
+    let t2=.6-x2*x2-y2*y2-z2*z2;if(t2<0)n2=0;else{g=pm[ii+i2+perm[jj+j2+perm[kk+k2]]]*3;t2*=t2;n2=t2*t2*(G3[g]*x2+G3[g+1]*y2+G3[g+2]*z2);}
+    let t3=.6-x3*x3-y3*y3-z3*z3;if(t3<0)n3=0;else{g=pm[ii+1+perm[jj+1+perm[kk+1]]]*3;t3*=t3;n3=t3*t3*(G3[g]*x3+G3[g+1]*y3+G3[g+2]*z3);}
+    return 32*(n0+n1+n2+n3);
+  };
+  const noise=new Simplex();
+
+  /* fBm: stack octaves at doubling frequency so detail exists at every scale.
+     2.03 rather than 2.0 keeps octaves from aligning into a grid artefact. */
+  function height(x,z,t){
+    const wz=z-t*DRIFT;                 // field drifts, like wind over water
+    let sum=0,norm=0,aM=1,fM=1;
+    for(let o=0;o<OCT;o++){
+      sum+=aM*noise.n3(x*FREQ*fM, wz*FREQ*fM, t*0.14*(1+o*0.4)+o*7.7);
+      norm+=aM; aM*=ROUGH; fM*=2.03;
+    }
+    return AMP*(sum/norm);
+  }
+
+  /* camera basis, looking from EYE toward the origin */
+  let FW,RT,UP;
+  (function(){
+    let fx=-EYE[0],fy=-EYE[1],fz=-EYE[2];
+    const fl=Math.hypot(fx,fy,fz);fx/=fl;fy/=fl;fz/=fl;
+    const up=[0,1,0];
+    let rx=fy*up[2]-fz*up[1], ry=fz*up[0]-fx*up[2], rz=fx*up[1]-fy*up[0];
+    const rl=Math.hypot(rx,ry,rz);rx/=rl;ry/=rl;rz/=rl;
+    FW=[fx,fy,fz];RT=[rx,ry,rz];
+    UP=[ry*fz-rz*fy, rz*fx-rx*fz, rx*fy-ry*fx];
+  })();
+
+  let W=0,H=0,DPR=1,TANH=Math.tan(FOV*Math.PI/360);
+  function fit(){
+    /* scrollbar-safe viewport width for the full-bleed break-out */
+    document.documentElement.style.setProperty('--vw',
+      document.documentElement.clientWidth+'px');
+    DPR=Math.min(devicePixelRatio||1,2);
+    const r=CV.getBoundingClientRect();
+    if(r.width<2||r.height<2) return;
+    W=r.width;H=r.height;
+    CV.width=Math.round(W*DPR);CV.height=Math.round(H*DPR);
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  addEventListener('resize',fit);
+
+  const o=[0,0,0];
+  function project(px,py,pz){
+    const dx=px-EYE[0],dy=py-EYE[1],dz=pz-EYE[2];
+    const vz=dx*FW[0]+dy*FW[1]+dz*FW[2];
+    if(vz<=.01) return null;
+    const vx=dx*RT[0]+dy*RT[1]+dz*RT[2];
+    const vy=dx*UP[0]+dy*UP[1]+dz*UP[2];
+    o[0]=W/2+(vx/vz)/(TANH*(W/H))*W/2;
+    o[1]=H/2-(vy/vz)/TANH*H/2+H*0.16;
+    o[2]=vz;
+    return o;
+  }
+
+  /* Draw into a few opacity bins rather than one fill per dot — thousands of
+     canvas state changes per frame is what makes this pattern slow. */
+  const NB=7, bins=new Array(NB);
+  const nearZ=EYE[2]-SPANZ-0.5, farZ=EYE[2]+SPANZ+0.5;
+  const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let onScreen=true;
+  new IntersectionObserver(e=>{onScreen=e[0].isIntersecting},{threshold:0}).observe(CV);
+
+  function render(now){
+    requestAnimationFrame(render);
+    if(!onScreen||!W) return;
+    const t=(REDUCE?4000:now)*0.001*SPEED;
+
+    ctx.clearRect(0,0,W,H);
+    for(let i=0;i<NB;i++) bins[i]=new Path2D();
+
+    for(let r=0;r<=ROWS;r++){
+      const z=-SPANZ+(r/ROWS)*SPANZ*2;
+      for(let c=0;c<=COLS;c++){
+        const x=-SPANX+(c/COLS)*SPANX*2;
+        const h=height(x,z,t);
+        const s=project(x,h,z);
+        if(!s) continue;
+        const px=s[0],py=s[1];
+        if(px<-8||px>W+8||py<-8||py>H+8) continue;
+        const df=1-Math.max(0,Math.min(1,(s[2]-nearZ)/(farZ-nearZ)))*FADE;
+        const a=(0.85*df)*(0.55+0.45*(h/AMP*0.5+0.5));
+        const rad=Math.max(0.4,DOT*(EYE[2]/s[2])*df);
+        const bi=Math.max(0,Math.min(NB-1,Math.round(a*NB-0.5)));
+        bins[bi].moveTo(px+rad,py);      // moveTo keeps each arc a separate dot
+        bins[bi].arc(px,py,rad,0,6.283);
+      }
+    }
+    for(let i=0;i<NB;i++){
+      ctx.fillStyle=`rgba(${COLOR},${((i+0.5)/NB).toFixed(3)})`;
+      ctx.fill(bins[i]);
+    }
+  }
+
+  fit();
+  requestAnimationFrame(render);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dot-Wave Background — Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#FCFCFA; --ink:#0B0B0E; --mut:#6A6A72; --fnt:#A8A8AE;
+  --line:#E7E7E1; --navy:#002D99;
+}
+html,body{height:100%}
+body{
+  font-family:'Instrument Sans',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;overflow:hidden;
+}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;letter-spacing:0}
+
+.stage{position:fixed;inset:0}
+/* wave sits anchored to the bottom, like the reference footer */
+#wave{position:absolute;left:0;right:0;bottom:0;width:100%;height:66%;display:block}
+.hero{
+  position:relative;z-index:3;height:100%;max-width:1360px;margin:0 auto;
+  padding:0 44px;display:flex;flex-direction:column;justify-content:center;
+  pointer-events:none;transition:opacity .3s;
+}
+.hero.hide{opacity:0}
+.k{
+  font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--mut);display:flex;align-items:center;gap:14px;margin-bottom:32px;
+}
+.k i{width:8px;height:8px;border-radius:50%;background:var(--navy);display:block}
+h1{
+  font-size:clamp(48px,8.6vw,132px);font-weight:620;letter-spacing:-.052em;line-height:.94;
+  max-width:12ch;margin-bottom:40px;
+}
+h1 .u{position:relative;white-space:nowrap}
+h1 .u::after{content:'';position:absolute;left:0;bottom:.02em;height:.045em;width:100%;background:var(--navy)}
+.sub{font-size:clamp(16px,1.5vw,20px);color:var(--mut);line-height:1.55;max-width:440px}
+
+.panel{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  background:rgba(252,252,250,.93);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--line);padding:14px 24px 16px;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+}
+.panel.min{transform:translateY(calc(100% - 42px))}
+.pbar{display:flex;align-items:center;justify-content:space-between;gap:16px;height:28px;margin-bottom:12px}
+.ptitle{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+.swatches{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:22px;height:22px;border-radius:50%;border:1px solid rgba(0,0,0,.12);cursor:pointer;transition:transform .15s,box-shadow .2s}
+.sw:hover{transform:scale(1.12)}
+.sw.on{box-shadow:0 0 0 2px var(--paper),0 0 0 3px var(--ink)}
+.tools{display:flex;gap:6px}
+.chip{
+  font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  background:none;border:1px solid var(--line);color:var(--ink);
+  padding:6px 11px;border-radius:2px;cursor:pointer;transition:border-color .2s,color .2s;
+}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--navy);color:var(--navy)}
+.rows{display:grid;grid-template-columns:repeat(4,1fr);gap:10px 26px}
+.ctl{display:flex;align-items:center;gap:10px}
+.ctl label{
+  font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;
+  color:var(--mut);width:82px;flex-shrink:0;
+}
+.ctl input[type=range]{flex:1;height:2px;-webkit-appearance:none;appearance:none;background:var(--line);outline:none}
+.ctl input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:11px;height:11px;border-radius:50%;background:var(--ink);cursor:pointer}
+.ctl input[type=range]::-moz-range-thumb{width:11px;height:11px;border:none;border-radius:50%;background:var(--ink);cursor:pointer}
+.ctl .val{font-family:'Geist Mono',monospace;font-size:10.5px;color:var(--ink);width:42px;text-align:right;flex-shrink:0}
+.ctl select{flex:1;font-family:'Geist Mono',monospace;font-size:10.5px;border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:5px 7px;border-radius:2px}
+.readout{
+  margin-top:12px;padding-top:10px;border-top:1px solid var(--line);
+  font-family:'Geist Mono',monospace;font-size:10.5px;color:var(--mut);white-space:nowrap;overflow-x:auto;
+}
+.readout b{color:var(--navy);font-weight:500}
+@media(max-width:1100px){.rows{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){.rows{grid-template-columns:1fr}.hero{justify-content:flex-start;padding-top:120px}}
+</style>
+</head>
+<body>
+
+<div class="stage">
+  <canvas id="wave"></canvas>
+  <div class="hero" id="hero">
+    <div class="k"><i></i><span>Early-Stage Venture · Frontier Technology · Shanghai</span></div>
+    <h1>Conviction before <span class="u">consensus.</span></h1>
+    <p class="sub">We back founders building frontier technology — writing the first check, often before the company exists.</p>
+  </div>
+</div>
+
+<div class="panel" id="panel">
+  <div class="pbar">
+    <span class="ptitle">Dot-Wave — Tuning <span id="perf" style="color:var(--navy)"></span></span>
+    <div class="swatches" id="swatches"></div>
+    <div class="tools">
+      <button class="chip" id="modeBtn">Dots</button>
+      <button class="chip" id="textBtn">Text</button>
+      <button class="chip" id="minBtn">▾</button>
+    </div>
+  </div>
+  <div class="rows" id="rows"></div>
+  <div class="readout" id="readout"></div>
+</div>
+
+<script>
+/* ═══════════ 3D Simplex noise — public domain (Gustavson / Wagner) ═══════════ */
+function SimplexNoise(r){
+  r=r||Math;
+  this.p=new Uint8Array(256); this.perm=new Uint8Array(512); this.pm=new Uint8Array(512);
+  for(let i=0;i<256;i++) this.p[i]=i;
+  for(let i=255;i>0;i--){const n=(i+1)*r.random()|0; const q=this.p[i]; this.p[i]=this.p[n]; this.p[n]=q;}
+  for(let i=0;i<512;i++){this.perm[i]=this.p[i&255]; this.pm[i]=this.perm[i]%12;}
+}
+const G3D=new Float32Array([1,1,0,-1,1,0,1,-1,0,-1,-1,0,1,0,1,-1,0,1,1,0,-1,-1,0,-1,0,1,1,0,-1,1,0,1,-1,0,-1,-1]);
+SimplexNoise.prototype.noise3D=function(xin,yin,zin){
+  const perm=this.perm, pm=this.pm, F3=1/3, Gc=1/6;
+  let n0,n1,n2,n3;
+  const s=(xin+yin+zin)*F3;
+  const i=Math.floor(xin+s), j=Math.floor(yin+s), k=Math.floor(zin+s);
+  const t=(i+j+k)*Gc, X0=i-t,Y0=j-t,Z0=k-t;
+  const x0=xin-X0,y0=yin-Y0,z0=zin-Z0;
+  let i1,j1,k1,i2,j2,k2;
+  if(x0>=y0){
+    if(y0>=z0){i1=1;j1=0;k1=0;i2=1;j2=1;k2=0;}
+    else if(x0>=z0){i1=1;j1=0;k1=0;i2=1;j2=0;k2=1;}
+    else{i1=0;j1=0;k1=1;i2=1;j2=0;k2=1;}
+  }else{
+    if(y0<z0){i1=0;j1=0;k1=1;i2=0;j2=1;k2=1;}
+    else if(x0<z0){i1=0;j1=1;k1=0;i2=0;j2=1;k2=1;}
+    else{i1=0;j1=1;k1=0;i2=1;j2=1;k2=0;}
+  }
+  const x1=x0-i1+Gc,y1=y0-j1+Gc,z1=z0-k1+Gc;
+  const x2=x0-i2+2*Gc,y2=y0-j2+2*Gc,z2=z0-k2+2*Gc;
+  const x3=x0-1+3*Gc,y3=y0-1+3*Gc,z3=z0-1+3*Gc;
+  const ii=i&255,jj=j&255,kk=k&255;
+  let g;
+  let t0=0.6-x0*x0-y0*y0-z0*z0; if(t0<0)n0=0;else{g=pm[ii+perm[jj+perm[kk]]]*3;t0*=t0;n0=t0*t0*(G3D[g]*x0+G3D[g+1]*y0+G3D[g+2]*z0);}
+  let t1=0.6-x1*x1-y1*y1-z1*z1; if(t1<0)n1=0;else{g=pm[ii+i1+perm[jj+j1+perm[kk+k1]]]*3;t1*=t1;n1=t1*t1*(G3D[g]*x1+G3D[g+1]*y1+G3D[g+2]*z1);}
+  let t2=0.6-x2*x2-y2*y2-z2*z2; if(t2<0)n2=0;else{g=pm[ii+i2+perm[jj+j2+perm[kk+k2]]]*3;t2*=t2;n2=t2*t2*(G3D[g]*x2+G3D[g+1]*y2+G3D[g+2]*z2);}
+  let t3=0.6-x3*x3-y3*y3-z3*z3; if(t3<0)n3=0;else{g=pm[ii+1+perm[jj+1+perm[kk+1]]]*3;t3*=t3;n3=t3*t3*(G3D[g]*x3+G3D[g+1]*y3+G3D[g+2]*z3);}
+  return 32*(n0+n1+n2+n3);
+};
+
+/* ═══════════ params ═══════════ */
+const P={
+  color:'#9A9AA2',
+  cols:96, rows:66,           // grid resolution
+  amp:0.55,                   // wave height
+  speed:0.7,                  // time scale
+  freq:0.40,                  // spatial noise frequency (x/ (1/freq))
+  octaves:3,                  // fBm layers — more = finer detail
+  rough:0.30,                 // persistence: how much each octave contributes
+  warp:0.15,                  // domain warping — bends the field, kills regularity
+  drift:0.16,                 // field slowly travels, like wind over water
+  chop:0.30,                  // crest sharpening (ridged) vs soft swell
+  size:2.7,                   // dot base size (px)
+  fov:10,                     // camera field of view (deg)
+  camY:1.3, camZ:6.6,         // camera height / distance
+  fade:0.55,                  // depth fade (0 flat .. 1 strong)
+  mode:'dots'                 // dots | mesh
+};
+const SW=[
+  {c:'#002D99',n:'品牌蓝 · FountainBridge'},
+  {c:'#00247E',n:'品牌深蓝'},
+  {c:'#0B3DC4',n:'品牌亮蓝'},
+  {c:'#6A7D9A',n:'雾灰蓝'},
+  {c:'#9A9AA2',n:'低调灰'},
+  {c:'#0B0B0E',n:'墨黑'},
+  {c:'#8575FE',n:'清华紫（参考）'}
+];
+
+/* ═══════════ canvas + camera ═══════════ */
+const cv=document.getElementById('wave'), ctx=cv.getContext('2d');
+let W=0,H=0,DPR=1;
+const simplex=new SimplexNoise();
+
+/* ═══════════ height field ═══════════
+   fBm (fractal Brownian motion) + domain warping.
+   One octave of noise reads smooth and repetitive; stacking octaves at
+   doubling frequency adds detail at every scale, and warping the sample
+   coordinates by a second noise field bends the whole thing so it never
+   settles into a visible pattern — the way real water never does.        */
+function height(x,z,t){
+  let wx=x, wz=z;
+
+  /* domain warp — displace where we sample, not what we sample */
+  if(P.warp>0.001){
+    const q1=simplex.noise3D(x*0.55+11.3, z*0.55-4.7, t*0.06);
+    const q2=simplex.noise3D(x*0.55-8.1,  z*0.55+2.9, t*0.06+5.2);
+    wx+=q1*P.warp; wz+=q2*P.warp;
+  }
+
+  /* the field slowly travels, like wind pushing a swell across water */
+  wz -= t*P.drift;
+
+  let sum=0, norm=0, aM=1, fM=1;
+  for(let o=0;o<P.octaves;o++){
+    /* 2.03 rather than 2.0 so octaves never line up into a grid artefact,
+       and higher octaves evolve faster — small ripples move quicker than swells */
+    let n=simplex.noise3D(wx*P.freq*fM, wz*P.freq*fM, t*0.14*(1+o*0.4)+o*7.7);
+    if(P.chop>0.001){
+      /* blend toward ridged noise: sharpens crests, flattens troughs */
+      const ridged=1-2*Math.abs(n);
+      n=n*(1-P.chop)+ridged*P.chop;
+    }
+    sum+=aM*n; norm+=aM;
+    aM*=P.rough; fM*=2.03;
+  }
+  return P.amp*(sum/norm);
+}
+
+/* ═══════════ adaptive quality ═══════════
+   The noise field is the expensive part and it scales with grid density.
+   Rather than guess what the visitor's machine can handle, measure the real
+   frame time and scale the grid (and pixel ratio) until we hold ~60fps.     */
+const QUAL={
+  scale:1,          // grid density multiplier, 1 → full
+  dprCap:1.75,      // pixel-ratio ceiling, drops to 1 if we stay slow
+  acc:0, n:0, last:0, locked:false
+};
+function adapt(dt,now){
+  if(QUAL.locked) return;
+  QUAL.acc+=dt; QUAL.n++;
+  if(now-QUAL.last<900) return;              // judge on ~1s of frames
+  const avg=QUAL.acc/QUAL.n; QUAL.acc=0; QUAL.n=0; QUAL.last=now;
+  /* avg is JS work per frame; leave headroom for layout + compositing */
+  if(avg>10 && QUAL.scale>0.45){             // eating the frame → back off
+    QUAL.scale=Math.max(0.45,QUAL.scale-0.12);
+    if(QUAL.scale<=0.7 && QUAL.dprCap>1){ QUAL.dprCap=1; fit(); }
+  }else if(avg<5 && QUAL.scale<1){           // plenty of headroom → give it back
+    QUAL.scale=Math.min(1,QUAL.scale+0.06);
+  }
+  const el=document.getElementById('perf');
+  if(el) el.textContent=`· ${avg.toFixed(1)}ms work · q${QUAL.scale.toFixed(2)} · dpr${DPR} · ${drawnPts} dots`;
+}
+
+function fit(){
+  DPR=Math.min(devicePixelRatio||1,QUAL.dprCap);
+  const r=cv.getBoundingClientRect();
+  W=r.width; H=r.height;
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+addEventListener('resize',fit);
+
+/* don't burn CPU when the canvas isn't on screen or the tab is in the background */
+let visible=true, inView=true;
+document.addEventListener('visibilitychange',()=>{visible=!document.hidden});
+new IntersectionObserver(es=>{inView=es[0].isIntersecting},{threshold:0}).observe(cv);
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* lookAt basis (eye -> origin) */
+let R=[1,0,0],U=[0,1,0],Fw=[0,0,1],EYE=[4,2,8];
+function buildCam(){
+  EYE=[4,P.camY,P.camZ];
+  const tgt=[0,0,0], up=[0,1,0];
+  let fx=tgt[0]-EYE[0], fy=tgt[1]-EYE[1], fz=tgt[2]-EYE[2];
+  let fl=Math.hypot(fx,fy,fz); fx/=fl;fy/=fl;fz/=fl;
+  // right = f × up
+  let rx=fy*up[2]-fz*up[1], ry=fz*up[0]-fx*up[2], rz=fx*up[1]-fy*up[0];
+  let rl=Math.hypot(rx,ry,rz); rx/=rl;ry/=rl;rz/=rl;
+  // up = r × f
+  let ux=ry*fz-rz*fy, uy=rz*fx-rx*fz, uz=rx*fy-ry*fx;
+  Fw=[fx,fy,fz]; R=[rx,ry,rz]; U=[ux,uy,uz];
+}
+buildCam();
+
+/* project world point -> screen; returns null if behind camera */
+const proj=[0,0,0];
+function project(px,py,pz){
+  const dx=px-EYE[0], dy=py-EYE[1], dz=pz-EYE[2];
+  const vz=dx*Fw[0]+dy*Fw[1]+dz*Fw[2];        // depth (forward)
+  if(vz<=0.01) return null;
+  const vx=dx*R[0]+dy*R[1]+dz*R[2];
+  const vy=dx*U[0]+dy*U[1]+dz*U[2];
+  const tanH=Math.tan(P.fov*Math.PI/360);
+  const aspect=W/H;
+  const ndcx=(vx/vz)/(tanH*aspect);
+  const ndcy=(vy/vz)/tanH;
+  proj[0]=W/2+ndcx*W/2;
+  proj[1]=H/2 - ndcy*H/2 + H*0.16;             // nudge field toward lower area
+  proj[2]=vz;
+  return proj;
+}
+
+function hexToRgb(h){const n=parseInt(h.slice(1),16);return [n>>16&255,n>>8&255,n&255];}
+let COL=[133,117,254];
+
+/* ═══════════ render ═══════════ */
+/* Alpha buckets: instead of one beginPath+fill per dot (thousands of state
+   changes), sort dots into a few opacity bins and issue one fill per bin. */
+const NB=7;
+const bins=Array.from({length:NB},()=>new Path2D());
+let lastT=0, drawnPts=0;
+
+function frame(now){
+  requestAnimationFrame(frame);
+  if(!visible||!inView) return;                 // offscreen or backgrounded
+  const wStart=performance.now();
+
+  ctx.clearRect(0,0,W,H);
+  const t=(REDUCE?4000:now)*0.001*P.speed;      // reduced-motion → frozen frame
+  const gx=Math.max(12,Math.round(P.cols*QUAL.scale));
+  const gz=Math.max(10,Math.round(P.rows*QUAL.scale));
+  const spanX=2.0, spanZ=1.5;                   // plane 4 × 3 (half-extents)
+  const nearZ=P.camZ-spanZ-0.5, farZ=P.camZ+spanZ+0.5;
+  const col=`rgb(${COL[0]},${COL[1]},${COL[2]})`;
+  const dots=P.mode==='dots';
+  drawnPts=0;
+
+  if(dots){ for(let i=0;i<NB;i++) bins[i]=new Path2D(); }
+  else{ ctx.lineWidth=0.7; ctx.strokeStyle=col; }
+
+  for(let r=0;r<=gz;r++){
+    const gzz=-spanZ+(r/gz)*spanZ*2;
+    let prev=null, rowPath=dots?null:new Path2D(), rowA=0, rowN=0;
+    for(let c=0;c<=gx;c++){
+      const gxx=-spanX+(c/gx)*spanX*2;
+      const h=height(gxx,gzz,t);
+      const s=project(gxx,h,gzz);
+      if(!s){prev=null;continue;}
+      const depth=(s[2]-nearZ)/(farZ-nearZ);
+      const df=1-Math.max(0,Math.min(1,depth))*P.fade;
+      const a=(0.85*df)*(0.55+0.45*(h/P.amp*0.5+0.5));
+      if(dots){
+        const x=s[0], y=s[1];
+        if(x<-8||x>W+8||y<-8||y>H+8) continue;   // cull offscreen
+        const rad=Math.max(0.4,P.size*(1/s[2]*P.camZ)*df);
+        const bi=Math.max(0,Math.min(NB-1,Math.round(a*NB-0.5)));
+        bins[bi].moveTo(x+rad,y);                // moveTo so arcs stay separate
+        bins[bi].arc(x,y,rad,0,6.283);
+        drawnPts++;
+      }else{
+        if(prev){ rowPath.moveTo(prev[0],prev[1]); rowPath.lineTo(s[0],s[1]); rowA+=a; rowN++; }
+        prev=[s[0],s[1]];
+      }
+    }
+    if(!dots&&rowN){ ctx.globalAlpha=Math.max(0,Math.min(1,rowA/rowN*0.8)); ctx.stroke(rowPath); }
+  }
+
+  if(dots){
+    ctx.fillStyle=col;
+    for(let i=0;i<NB;i++){
+      ctx.globalAlpha=(i+0.5)/NB;
+      ctx.fill(bins[i]);
+    }
+  }
+  ctx.globalAlpha=1;
+  adapt(performance.now()-wStart, now);          // judge on real work time
+}
+
+/* ═══════════ UI ═══════════ */
+const SLIDERS=[
+  {k:'amp',   label:'Amplitude', min:0.05,max:1.4, step:0.05},
+  {k:'speed', label:'Speed',     min:0.1, max:3.0, step:0.1},
+  {k:'freq',  label:'Frequency', min:0.15,max:1.4, step:0.05},
+  {k:'octaves',label:'Octaves',  min:1,   max:5,   step:1, int:true},
+  {k:'rough', label:'Roughness', min:0.2, max:0.8, step:0.05},
+  {k:'warp',  label:'Warp',      min:0,   max:1.6, step:0.05},
+  {k:'drift', label:'Drift',     min:0,   max:0.6, step:0.02},
+  {k:'chop',  label:'Chop',      min:0,   max:1,   step:0.05},
+  {k:'cols',  label:'Cols',      min:20,  max:120, step:2, int:true, onchange:()=>{}},
+  {k:'rows',  label:'Rows',      min:14,  max:90,  step:2, int:true},
+  {k:'size',  label:'Dot size',  min:0.8, max:5,   step:0.1},
+  {k:'fov',   label:'FOV°',      min:6,   max:40,  step:1,  onchange:buildCam},
+  {k:'camY',  label:'Cam height',min:0.5, max:6,   step:0.1,onchange:buildCam},
+  {k:'camZ',  label:'Cam dist',  min:4,   max:16,  step:0.2,onchange:buildCam},
+  {k:'fade',  label:'Depth fade',min:0,   max:1,   step:0.05}
+];
+const rows=document.getElementById('rows');
+SLIDERS.forEach(s=>{
+  const d=document.createElement('div'); d.className='ctl';
+  d.innerHTML=`<label>${s.label}</label>
+    <input type="range" min="${s.min}" max="${s.max}" step="${s.step}" value="${P[s.k]}" data-k="${s.k}">
+    <span class="val" data-v="${s.k}"></span>`;
+  rows.appendChild(d);
+  d.querySelector('input').addEventListener('input',e=>{
+    P[s.k]= s.int ? parseInt(e.target.value) : parseFloat(e.target.value);
+    if(s.onchange) s.onchange(); sync();
+  });
+});
+const swEl=document.getElementById('swatches');
+SW.forEach(o=>{
+  const b=document.createElement('button'); b.className='sw'; b.style.background=o.c; b.title=o.n;
+  b.onclick=()=>{ P.color=o.c; COL=hexToRgb(o.c); sync(); };
+  swEl.appendChild(b);
+});
+function sync(){
+  document.querySelectorAll('input[data-k]').forEach(i=>{ i.value=P[i.dataset.k] });
+  document.querySelectorAll('[data-v]').forEach(s=>{
+    const k=s.dataset.v; const v=P[k];
+    s.textContent = (k==='cols'||k==='rows'||k==='fov'||k==='octaves') ? v : (+v).toFixed(2);
+  });
+  document.querySelectorAll('.sw').forEach((b,idx)=>b.classList.toggle('on',SW[idx].c.toLowerCase()===P.color.toLowerCase()));
+  document.getElementById('readout').innerHTML=
+    `<b>settings</b> color:${P.color} · grid:${P.cols}×${P.rows} · amp:${P.amp.toFixed(2)} · speed:${P.speed.toFixed(1)} `+
+    `· freq:${P.freq.toFixed(2)} · oct:${P.octaves} · rough:${P.rough.toFixed(2)} · warp:${P.warp.toFixed(2)} `+
+    `· drift:${P.drift.toFixed(2)} · chop:${P.chop.toFixed(2)} `+
+    `· dot:${P.size.toFixed(1)} · fov:${P.fov} · camY:${P.camY.toFixed(1)} · camZ:${P.camZ.toFixed(1)} · fade:${P.fade.toFixed(2)} · mode:${P.mode}`;
+}
+document.getElementById('modeBtn').onclick=e=>{
+  P.mode = P.mode==='dots'?'mesh':'dots';
+  e.target.textContent = P.mode==='dots'?'Dots':'Mesh'; e.target.classList.toggle('on',P.mode==='mesh'); sync();
+};
+document.getElementById('textBtn').onclick=e=>{ document.getElementById('hero').classList.toggle('hide'); e.target.classList.toggle('on'); };
+document.getElementById('minBtn').onclick=e=>{ const p=document.getElementById('panel'); p.classList.toggle('min'); e.target.textContent=p.classList.contains('min')?'▴':'▾'; };
+
+fit(); COL=hexToRgb(P.color); sync();
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Hero Motion Studies — FountainBridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --paper:#FCFCFA; --paper2:#F4F4F0;
+  --ink:#0B0B0E; --mut:#6A6A72; --fnt:#A8A8AE;
+  --line:#E7E7E1; --navy:#002D99;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+body{
+  font-family:'Instrument Sans',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;
+}
+.mono{font-family:'Geist Mono',ui-monospace,monospace;letter-spacing:0}
+
+/* ── head ── */
+.lab-head{max-width:1400px;margin:0 auto;padding:64px 40px 40px}
+.lab-kicker{
+  font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:14px;margin-bottom:26px;
+}
+.lab-kicker i{width:8px;height:8px;border-radius:50%;background:var(--navy);display:block}
+.lab-h1{font-size:clamp(34px,4.6vw,58px);font-weight:620;letter-spacing:-.045em;line-height:1.02;margin-bottom:20px}
+.lab-sub{font-size:17px;color:var(--mut);line-height:1.6;max-width:62ch}
+.lab-note{
+  margin-top:26px;padding:14px 18px;border:1px solid var(--line);background:var(--paper2);
+  font-size:13.5px;color:var(--mut);line-height:1.6;max-width:70ch;border-radius:3px;
+}
+.lab-note b{color:var(--ink);font-weight:600}
+
+/* ── grid ── */
+.grid{
+  max-width:1400px;margin:0 auto;padding:20px 40px 100px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:36px 30px;
+}
+.card{display:flex;flex-direction:column}
+.stage{
+  position:relative;aspect-ratio:16/10;border:1px solid var(--line);
+  background:var(--paper);overflow:hidden;border-radius:3px;cursor:pointer;
+  transition:border-color .3s var(--ease),transform .4s var(--ease);
+}
+.card:hover .stage{border-color:#CFCFC6;transform:translateY(-3px)}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage-idx{
+  position:absolute;top:12px;left:14px;z-index:2;
+  font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.08em;color:var(--fnt);
+}
+.stage-open{
+  position:absolute;right:12px;bottom:12px;z-index:2;
+  font-family:'Geist Mono',monospace;font-size:10px;letter-spacing:.07em;text-transform:uppercase;
+  color:var(--ink);background:rgba(252,252,250,.9);border:1px solid var(--line);
+  padding:6px 10px;border-radius:2px;opacity:0;transform:translateY(4px);
+  transition:opacity .3s var(--ease),transform .3s var(--ease);
+}
+.card:hover .stage-open{opacity:1;transform:translateY(0)}
+.meta{padding-top:16px}
+.meta h3{font-size:19px;font-weight:600;letter-spacing:-.03em;margin-bottom:5px}
+.meta .zh{font-size:13.5px;color:var(--mut);margin-bottom:9px}
+.meta p{font-size:13.5px;color:var(--mut);line-height:1.6}
+.meta .basis{
+  font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.05em;
+  text-transform:uppercase;color:var(--navy);margin-top:10px;
+}
+
+/* ── overlay ── */
+.ov{position:fixed;inset:0;z-index:999;background:var(--paper);display:none}
+.ov.on{display:block}
+.ov-canvas{position:absolute;inset:0;width:100%;height:100%}
+.ov-veil{
+  position:absolute;inset:0;
+  background:linear-gradient(100deg,rgba(252,252,250,.86) 0%,rgba(252,252,250,.55) 46%,rgba(252,252,250,.18) 100%);
+  pointer-events:none;
+}
+.ov-hero{
+  position:relative;z-index:3;height:100%;max-width:1360px;margin:0 auto;
+  padding:0 40px 0;display:flex;flex-direction:column;justify-content:flex-end;
+  padding-bottom:56px;
+}
+.ovk{
+  font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--mut);display:flex;align-items:center;gap:14px;margin-bottom:34px;
+}
+.ovk i{width:8px;height:8px;border-radius:50%;background:var(--navy);display:block}
+.ovh{
+  font-size:clamp(52px,9.6vw,150px);font-weight:620;letter-spacing:-.052em;line-height:.94;
+  max-width:12ch;margin-bottom:52px;
+}
+.ovh .u{position:relative;white-space:nowrap}
+.ovh .u::after{
+  content:'';position:absolute;left:0;bottom:.02em;height:.045em;width:100%;background:var(--navy);
+}
+.ov-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:40px;margin-bottom:52px;flex-wrap:wrap}
+.ov-sub{font-size:clamp(16px,1.5vw,20px);color:var(--mut);line-height:1.55;max-width:460px}
+.ov-cta{
+  display:inline-flex;align-items:center;gap:12px;font-size:15px;font-weight:550;
+  padding-bottom:6px;border-bottom:1px solid var(--ink);white-space:nowrap;
+}
+.ov-facts{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+.ov-fact{padding:22px 30px 0 0;border-right:1px solid var(--line)}
+.ov-fact:last-child{border-right:none}
+.ov-fact:not(:first-child){padding-left:30px}
+.ov-fn{font-family:'Geist Mono',monospace;font-size:clamp(24px,2.6vw,34px);font-weight:500;letter-spacing:-.03em;line-height:1}
+.ov-fl{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--fnt);margin-top:9px}
+
+/* overlay controls */
+.ov-bar{
+  position:absolute;top:0;left:0;right:0;z-index:5;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 40px;
+}
+.ov-name{font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink)}
+.ov-ctrl{display:flex;align-items:center;gap:8px}
+.ovbtn{
+  font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+  background:rgba(252,252,250,.9);border:1px solid var(--line);color:var(--ink);
+  padding:7px 12px;border-radius:2px;cursor:pointer;transition:border-color .2s,color .2s;
+}
+.ovbtn:hover{border-color:var(--ink)}
+.ovbtn.on{border-color:var(--navy);color:var(--navy)}
+.ov-hint{
+  position:absolute;bottom:16px;left:50%;transform:translateX(-50%);z-index:5;
+  font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:var(--fnt);
+}
+
+@media(max-width:1080px){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){
+  .grid{grid-template-columns:1fr;padding:20px 22px 80px}
+  .lab-head{padding:44px 22px 30px}
+  .ov-hero{padding:0 22px 40px}
+  .ov-bar{padding:16px 22px}
+  .ov-facts{grid-template-columns:1fr 1fr}
+  .ov-fact{padding:18px 0 16px!important;border-right:none!important}
+}
+</style>
+</head>
+<body>
+
+<div class="lab-head">
+  <div class="lab-kicker"><i></i><span>Hero Background · Motion Studies</span></div>
+  <h1 class="lab-h1" id="labH1">动效方案</h1>
+  <p class="lab-sub">每一种都基于真实的数学或物理模型，全部灰度、极低对比度，作为 Hero 背景不干扰标题阅读。刻意避开了「粒子连线」这类俗套方案。</p>
+  <div class="lab-note"><b>点击任意一格</b> 即可全屏预览 —— 会把动效套在真实的 Hero 版面下面（含标题、下划线、数据条），并可切换三档强度。键盘 <span class="mono">← →</span> 切换方案，<span class="mono">Esc</span> 退出。</div>
+</div>
+
+<main class="grid" id="grid"></main>
+
+<!-- overlay -->
+<div class="ov" id="ov">
+  <canvas class="ov-canvas" id="ovCanvas"></canvas>
+  <div class="ov-veil"></div>
+  <div class="ov-bar">
+    <div class="ov-name" id="ovName"></div>
+    <div class="ov-ctrl">
+      <button class="ovbtn" id="prevBtn">←</button>
+      <button class="ovbtn" id="nextBtn">→</button>
+      <button class="ovbtn" data-i="0">Subtle</button>
+      <button class="ovbtn on" data-i="1">Medium</button>
+      <button class="ovbtn" data-i="2">Bold</button>
+      <button class="ovbtn" id="closeBtn">Esc</button>
+    </div>
+  </div>
+  <div class="ov-hero">
+    <div class="ovk"><i></i><span>Early-Stage Venture · Frontier Technology · Shanghai</span></div>
+    <h1 class="ovh">Conviction before <span class="u">consensus.</span></h1>
+    <div class="ov-foot">
+      <p class="ov-sub">We back founders building frontier technology — writing the first check, often before the company exists.</p>
+      <span class="ov-cta">View companies <span>→</span></span>
+    </div>
+    <div class="ov-facts">
+      <div class="ov-fact"><div class="ov-fn">2019</div><div class="ov-fl">Founded</div></div>
+      <div class="ov-fact"><div class="ov-fn">50+</div><div class="ov-fl">Portfolio companies</div></div>
+      <div class="ov-fact"><div class="ov-fn">83%</div><div class="ov-fl">First-round or lead</div></div>
+      <div class="ov-fact"><div class="ov-fn">$3B+</div><div class="ov-fl">Follow-on capital</div></div>
+    </div>
+  </div>
+  <div class="ov-hint" id="ovHint"></div>
+</div>
+
+<script>
+/* ═══════════════ shared ═══════════════ */
+const PAPER='#FCFCFA', PAPER_RGB=[252,252,250], INK_RGB=[11,11,14];
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TAU = Math.PI*2;
+
+/* marching squares — draws iso-lines of a scalar grid */
+function isoLines(ctx, f, cols, rows, cell, level, ox, oy){
+  const W = cols+1;
+  for(let j=0;j<rows;j++){
+    for(let i=0;i<cols;i++){
+      const a=f[j*W+i], b=f[j*W+i+1], c=f[(j+1)*W+i+1], d=f[(j+1)*W+i];
+      let k=0;
+      if(a>level)k|=8; if(b>level)k|=4; if(c>level)k|=2; if(d>level)k|=1;
+      if(k===0||k===15) continue;
+      const x0=ox+i*cell, y0=oy+j*cell, s=cell;
+      const it=(p,q)=>(level-p)/(q-p);
+      const Tx=()=>x0+s*it(a,b), Ty=y0;
+      const Rx=x0+s,             Ry=()=>y0+s*it(b,c);
+      const Bx=()=>x0+s*it(d,c), By=y0+s;
+      const Lx=x0,               Ly=()=>y0+s*it(a,d);
+      const mv=(x,y)=>ctx.moveTo(x,y), ln=(x,y)=>ctx.lineTo(x,y);
+      switch(k){
+        case 1:  mv(Lx,Ly()); ln(Bx(),By); break;
+        case 2:  mv(Bx(),By); ln(Rx,Ry()); break;
+        case 3:  mv(Lx,Ly()); ln(Rx,Ry()); break;
+        case 4:  mv(Tx(),Ty); ln(Rx,Ry()); break;
+        case 5:  mv(Lx,Ly()); ln(Tx(),Ty); mv(Bx(),By); ln(Rx,Ry()); break;
+        case 6:  mv(Tx(),Ty); ln(Bx(),By); break;
+        case 7:  mv(Lx,Ly()); ln(Tx(),Ty); break;
+        case 8:  mv(Tx(),Ty); ln(Lx,Ly()); break;
+        case 9:  mv(Tx(),Ty); ln(Bx(),By); break;
+        case 10: mv(Tx(),Ty); ln(Rx,Ry()); mv(Lx,Ly()); ln(Bx(),By); break;
+        case 11: mv(Tx(),Ty); ln(Rx,Ry()); break;
+        case 12: mv(Lx,Ly()); ln(Rx,Ry()); break;
+        case 13: mv(Bx(),By); ln(Rx,Ry()); break;
+        case 14: mv(Lx,Ly()); ln(Bx(),By); break;
+      }
+    }
+  }
+}
+const ink = a => `rgba(11,11,14,${a})`;
+const navy = a => `rgba(0,45,153,${a})`;
+
+/* ═══════════════ 1. CONTOUR FIELD ═══════════════
+   Level sets of a scalar field built from radial waves
+   emitted by slowly drifting sources — interference topography. */
+function makeContour(ctx,w,h,K){
+  let cell,cols,rows,f;
+  function size(){
+    cell = Math.max(7, Math.min(w,h)/40);
+    cols = Math.ceil(w/cell); rows = Math.ceil(h/cell);
+    f = new Float32Array((cols+1)*(rows+1));
+  }
+  size();
+  const src=[{a:0.00,r:0.34,s:0.13},{a:2.1,r:0.42,s:-0.09},{a:4.3,r:0.28,s:0.11}];
+  return {
+    resize(nw,nh){w=nw;h=nh;size()},
+    frame(t){
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      const S=Math.min(w,h), W=cols+1;
+      const pts=src.map(o=>({
+        x:w/2 + Math.cos(o.a+t*o.s)*S*o.r,
+        y:h/2 + Math.sin(o.a+t*o.s*1.3)*S*o.r*0.7
+      }));
+      const k = 17/S;
+      for(let j=0;j<=rows;j++){
+        const y=j*cell;
+        for(let i=0;i<=cols;i++){
+          const x=i*cell;
+          let v=0;
+          for(let p=0;p<pts.length;p++){
+            const dx=x-pts[p].x, dy=y-pts[p].y;
+            const d=Math.sqrt(dx*dx+dy*dy);
+            v += Math.sin(d*k - t*0.85 + p*1.7)/(1+d*0.0022);
+          }
+          v += 0.5*Math.sin((x*0.0032 + y*0.0026) + t*0.22);
+          f[j*W+i]=v;
+        }
+      }
+      ctx.lineWidth=1;
+      const levels=[-1.5,-1.0,-0.5,0,0.5,1.0,1.5];
+      for(const L of levels){
+        const mid = Math.abs(L)<0.01;
+        ctx.strokeStyle = mid ? navy(0.26*K) : ink(0.13*K);
+        ctx.beginPath();
+        isoLines(ctx,f,cols,rows,cell,L,0,0);
+        ctx.stroke();
+      }
+    }
+  };
+}
+
+/* ═══════════════ 2. FLOW FIELD ═══════════════
+   Massless tracers advected through a smooth analytic
+   velocity field — laminar streamlines, fluid dynamics. */
+function makeFlow(ctx,w,h,K){
+  let ps=[],N,TRAIL,S;
+  /* stream function ψ — velocity is its curl, so the flow is
+     exactly divergence-free (incompressible), like real water. */
+  const MODES=[
+    {a:1.00,kx: 1.0,ky: 0.7,w: 0.10},
+    {a:0.62,kx:-0.7,ky: 1.3,w:-0.08},
+    {a:0.45,kx: 1.7,ky:-1.1,w: 0.13},
+    {a:0.30,kx:-1.9,ky:-1.7,w:-0.06}
+  ];
+  function vel(x,y,t,out){
+    const u=x/S, v=y/S;
+    let vx=0, vy=0;
+    for(let i=0;i<MODES.length;i++){
+      const m=MODES[i];
+      const c=Math.cos(m.kx*u + m.ky*v + m.w*t)*m.a;
+      vx +=  m.ky*c;      // ∂ψ/∂y
+      vy += -m.kx*c;      // −∂ψ/∂x
+    }
+    const L=Math.hypot(vx,vy)||1;
+    out[0]=vx/L; out[1]=vy/L;
+  }
+  function spawn(){
+    return {x:Math.random()*w, y:Math.random()*h,
+            tr:[], age:0, life:340+Math.random()*420, sp:1.25+Math.random()*0.9};
+  }
+  function size(){
+    S = Math.min(w,h)/3.1;
+    TRAIL = w<600 ? 42 : 66;
+    N = Math.max(16, Math.min(300, Math.round(w*h/3800)));
+    ps = new Array(N).fill(0).map(()=>{
+      const p=spawn(); p.age=Math.random()*p.life; return p;
+    });
+  }
+  size();
+  const o=[0,0];
+  return {
+    resize(nw,nh){w=nw;h=nh;size()},
+    frame(t){
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      ctx.lineCap='round'; ctx.lineJoin='round';
+
+      for(let i=0;i<ps.length;i++){
+        const p=ps[i];
+        vel(p.x,p.y,t,o);
+        p.x+=o[0]*p.sp; p.y+=o[1]*p.sp;
+        p.tr.push(p.x,p.y);
+        if(p.tr.length>TRAIL*2) p.tr.splice(0,2);
+        p.age++;
+        if(p.x<-40||p.x>w+40||p.y<-40||p.y>h+40||p.age>p.life){ ps[i]=spawn(); continue; }
+
+        const tr=p.tr, n=tr.length/2;
+        if(n<3) continue;
+        /* fade in/out at the ends of the particle's life */
+        const f=Math.min(1, Math.min(p.age,p.life-p.age)/70);
+
+        /* body of the filament */
+        ctx.strokeStyle=ink(0.10*K*f); ctx.lineWidth=0.7;
+        ctx.beginPath(); ctx.moveTo(tr[0],tr[1]);
+        for(let j=1;j<n;j++) ctx.lineTo(tr[j*2],tr[j*2+1]);
+        ctx.stroke();
+
+        /* brighter head — gives direction and a sense of current */
+        const hs=Math.max(0,n-14);
+        ctx.strokeStyle=ink(0.17*K*f); ctx.lineWidth=0.85;
+        ctx.beginPath(); ctx.moveTo(tr[hs*2],tr[hs*2+1]);
+        for(let j=hs+1;j<n;j++) ctx.lineTo(tr[j*2],tr[j*2+1]);
+        ctx.stroke();
+      }
+    }
+  };
+}
+
+/* ═══════════════ 3. CHLADNI FIGURES ═══════════════
+   Nodal lines of a vibrating square plate:
+   cos(nπx)cos(mπy) − cos(mπx)cos(nπy) = 0 */
+function makeChladni(ctx,w,h,K){
+  let cell,cols,rows,f;
+  function size(){
+    cell = Math.max(6, Math.min(w,h)/64);
+    cols = Math.ceil(w/cell); rows = Math.ceil(h/cell);
+    f = new Float32Array((cols+1)*(rows+1));
+  }
+  size();
+  return {
+    resize(nw,nh){w=nw;h=nh;size()},
+    frame(t){
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      const n = 3.2 + 1.9*Math.sin(t*0.075);
+      const m = 5.1 + 2.1*Math.cos(t*0.058);
+      const W=cols+1, PI=Math.PI;
+      for(let j=0;j<=rows;j++){
+        const v=(j*cell)/h;
+        for(let i=0;i<=cols;i++){
+          const u=(i*cell)/w;
+          f[j*W+i] = Math.cos(n*PI*u)*Math.cos(m*PI*v) - Math.cos(m*PI*u)*Math.cos(n*PI*v);
+        }
+      }
+      ctx.lineWidth=1;
+      ctx.strokeStyle=ink(0.20*K);
+      ctx.beginPath(); isoLines(ctx,f,cols,rows,cell,0,0,0); ctx.stroke();
+      ctx.strokeStyle=ink(0.07*K);
+      ctx.beginPath();
+      isoLines(ctx,f,cols,rows,cell,0.42,0,0);
+      isoLines(ctx,f,cols,rows,cell,-0.42,0,0);
+      ctx.stroke();
+    }
+  };
+}
+
+/* ═══════════════ 4. HARMONOGRAPH ═══════════════
+   Two damped pendulums tracing x(t), y(t) — the
+   19th-century mechanical plotter, pure Lissajous decay. */
+function makeHarmo(ctx,w,h,K){
+  let P,tau,phase,fade;
+  function reset(){
+    const R=()=>Math.random();
+    const base=[2,3,4,5][(R()*4)|0];
+    P={
+      f1:base+ (R()-0.5)*0.02, f2:base*0.5+(R()-0.5)*0.02,
+      f3:base+ (R()-0.5)*0.02, f4:(base+1)*0.5+(R()-0.5)*0.02,
+      p1:R()*TAU,p2:R()*TAU,p3:R()*TAU,p4:R()*TAU,
+      d1:0.0016+R()*0.0012, d2:0.0016+R()*0.0012,
+      d3:0.0016+R()*0.0012, d4:0.0016+R()*0.0012
+    };
+    tau=0; phase='draw'; fade=0;
+    ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+  }
+  reset();
+  function pt(s){
+    const A=Math.min(w,h)*0.21;
+    const x = A*Math.sin(P.f1*s+P.p1)*Math.exp(-P.d1*s) + A*Math.sin(P.f2*s+P.p2)*Math.exp(-P.d2*s);
+    const y = A*Math.sin(P.f3*s+P.p3)*Math.exp(-P.d3*s) + A*Math.sin(P.f4*s+P.p4)*Math.exp(-P.d4*s);
+    return [w/2+x, h/2+y];
+  }
+  return {
+    resize(nw,nh){w=nw;h=nh;reset()},
+    frame(){
+      if(phase==='fade'){
+        ctx.fillStyle='rgba(252,252,250,0.045)'; ctx.fillRect(0,0,w,h);
+        if(++fade>90) reset();
+        return;
+      }
+      ctx.fillStyle='rgba(252,252,250,0.016)'; ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle=ink(0.085*K); ctx.lineWidth=0.7;
+      ctx.beginPath();
+      let [px,py]=pt(tau);
+      ctx.moveTo(px,py);
+      for(let s=0;s<26;s++){
+        tau+=0.055;
+        const [x,y]=pt(tau);
+        ctx.lineTo(x,y);
+      }
+      ctx.stroke();
+      if(Math.exp(-P.d1*tau)<0.16) phase='fade';
+    }
+  };
+}
+
+/* ═══════════════ 5. LORENZ ATTRACTOR ═══════════════
+   dx=σ(y−x), dy=x(ρ−z)−y, dz=xy−βz
+   Deterministic chaos, projected and slowly rotated. */
+function makeLorenz(ctx,w,h,K){
+  let x=0.9,y=1.7,z=22, rot=0;
+  function clear(){ctx.fillStyle=PAPER;ctx.fillRect(0,0,w,h)}
+  clear();
+  const S=10,R=28,B=8/3,dt=0.0042;
+  return {
+    resize(nw,nh){w=nw;h=nh;clear()},
+    frame(){
+      ctx.fillStyle='rgba(252,252,250,0.030)'; ctx.fillRect(0,0,w,h);
+      rot+=0.0016;
+      const sc=Math.min(w,h)/62, cx=w/2, cy=h/2+Math.min(w,h)*0.16;
+      const ca=Math.cos(rot), sa=Math.sin(rot);
+      ctx.lineWidth=0.8; ctx.lineCap='round';
+      ctx.strokeStyle=ink(0.26*K);
+      ctx.beginPath();
+      let started=false;
+      for(let i=0;i<58;i++){
+        const dx=S*(y-x), dy=x*(R-z)-y, dz=x*y-B*z;
+        x+=dx*dt; y+=dy*dt; z+=dz*dt;
+        const rx=x*ca - y*sa;
+        const px=cx+rx*sc, py=cy-(z-26)*sc;
+        if(!started){ctx.moveTo(px,py);started=true}
+        else ctx.lineTo(px,py);
+      }
+      ctx.stroke();
+    }
+  };
+}
+
+/* ═══════════════ 6. JULIA SET ═══════════════
+   z ← z² + c, with c tracing a circle in the complex
+   plane — the fractal boundary morphs continuously. */
+function makeJulia(ctx,w,h,K){
+  const off=document.createElement('canvas');
+  let octx,img,ow,oh,last=-9;
+  function size(){
+    const div = w<600 ? 2.4 : 5;
+    ow=Math.max(150,Math.round(w/div)); oh=Math.max(94,Math.round(h/div));
+    off.width=ow; off.height=oh;
+    octx=off.getContext('2d',{willReadFrequently:true});
+    img=octx.createImageData(ow,oh);
+  }
+  size();
+  const MAX=40, L2=Math.log(2);
+  function render(t){
+    const th=t*0.055;
+    const cx=0.7885*Math.cos(th), cy=0.7885*Math.sin(th);
+    const d=img.data, asp=ow/oh, span=1.55;
+    for(let j=0;j<oh;j++){
+      const zy0=((j/oh)*2-1)*span;
+      for(let i=0;i<ow;i++){
+        const zx0=((i/ow)*2-1)*span*asp;
+        let zx=zx0, zy=zy0, k=0, m=0;
+        while(k<MAX){ m=zx*zx+zy*zy; if(m>4)break;
+          const xt=zx*zx-zy*zy+cx; zy=2*zx*zy+cy; zx=xt; k++; }
+        let a;
+        if(k>=MAX) a=0.20*K;
+        else{
+          const nu=Math.log(Math.log(Math.max(m,1.0001))/2/L2)/L2;
+          a=Math.pow(Math.max(0,(k+1-nu))/MAX,0.72)*0.26*K;
+        }
+        const o=(j*ow+i)*4;
+        d[o]  =PAPER_RGB[0]+(INK_RGB[0]-PAPER_RGB[0])*a;
+        d[o+1]=PAPER_RGB[1]+(INK_RGB[1]-PAPER_RGB[1])*a;
+        d[o+2]=PAPER_RGB[2]+(INK_RGB[2]-PAPER_RGB[2])*a;
+        d[o+3]=255;
+      }
+    }
+    octx.putImageData(img,0,0);
+  }
+  return {
+    resize(nw,nh){w=nw;h=nh;size();last=-9},
+    frame(t){
+      if(t-last>0.042){ last=t; render(t); }
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+      ctx.drawImage(off,0,0,w,h);
+    }
+  };
+}
+
+/* ═══════════════ 7. QUASICRYSTAL ═══════════════
+   Five plane waves at equal angles superpose into a
+   quasiperiodic tiling — 10-fold symmetry, never repeating. */
+function makeQuasi(ctx,w,h,K){
+  let cell,cols,rows,f; const N=5;
+  function size(){
+    cell=Math.max(6, Math.min(w,h)/58);
+    cols=Math.ceil(w/cell); rows=Math.ceil(h/cell);
+    f=new Float32Array((cols+1)*(rows+1));
+  }
+  size();
+  return {
+    resize(nw,nh){w=nw;h=nh;size()},
+    frame(t){
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      const S=Math.min(w,h), k=TAU/(S/7.2), W=cols+1, cx=w/2, cy=h/2;
+      const dir=[];
+      for(let i=0;i<N;i++){
+        const a=Math.PI*i/N + t*0.010;
+        dir.push([Math.cos(a)*k, Math.sin(a)*k, t*(0.09+i*0.019)]);
+      }
+      for(let j=0;j<=rows;j++){
+        const y=j*cell-cy;
+        for(let i=0;i<=cols;i++){
+          const x=i*cell-cx;
+          let v=0;
+          for(let d=0;d<N;d++){const D=dir[d]; v+=Math.cos(D[0]*x+D[1]*y+D[2]);}
+          f[j*W+i]=v;
+        }
+      }
+      ctx.lineWidth=1;
+      for(const L of [-2.3,-1.15,0,1.15,2.3]){
+        ctx.strokeStyle = L===0 ? navy(0.15*K) : ink(0.12*K);
+        ctx.beginPath(); isoLines(ctx,f,cols,rows,cell,L,0,0); ctx.stroke();
+      }
+    }
+  };
+}
+
+/* ═══════════════ 8. MOIRÉ SUPERLATTICE ═══════════════
+   Two triangular lattices twisted by a few degrees — the
+   physics behind magic-angle bilayer graphene. */
+function makeMoire(ctx,w,h,K){
+  return {
+    resize(nw,nh){w=nw;h=nh},
+    frame(t){
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      const d=Math.max(13, Math.min(w,h)/17);
+      const R=Math.hypot(w,h)/2+d*2, cx=w/2, cy=h/2;
+      const theta=(4.2+2.8*Math.sin(t*0.05))*Math.PI/180;
+      ctx.lineWidth=0.65;
+      for(let layer=0;layer<2;layer++){
+        const rot = layer? theta : 0;
+        ctx.strokeStyle=ink(0.10*K);
+        ctx.beginPath();
+        for(let di=0;di<3;di++){
+          const a=rot + di*Math.PI/3;
+          const ux=Math.cos(a), uy=Math.sin(a), nx=-uy, ny=ux;
+          const cnt=Math.ceil(R/d);
+          for(let m=-cnt;m<=cnt;m++){
+            const px=cx+nx*m*d, py=cy+ny*m*d;
+            ctx.moveTo(px-ux*R,py-uy*R); ctx.lineTo(px+ux*R,py+uy*R);
+          }
+        }
+        ctx.stroke();
+      }
+    }
+  };
+}
+
+/* ═══════════════ 9. REACTION–DIFFUSION ═══════════════
+   Gray–Scott model: two chemicals diffusing and reacting.
+   Turing's 1952 theory of how patterns form in nature. */
+function makeRD(ctx,w,h,K){
+  const off=document.createElement('canvas');
+  let octx,img,gw,gh,u,v,u2,v2,last=-9;
+  const Du=0.16,Dv=0.08,F=0.0295,kk=0.057;
+  function step(){
+    for(let y=0;y<gh;y++){
+      const yp=((y-1+gh)%gh)*gw, yn=((y+1)%gh)*gw, yc=y*gw;
+      for(let x=0;x<gw;x++){
+        const xp=(x-1+gw)%gw, xn=(x+1)%gw, i=yc+x;
+        const lu=u[yc+xp]+u[yc+xn]+u[yp+x]+u[yn+x]-4*u[i];
+        const lv=v[yc+xp]+v[yc+xn]+v[yp+x]+v[yn+x]-4*v[i];
+        const r=u[i]*v[i]*v[i];
+        u2[i]=u[i]+Du*lu-r+F*(1-u[i]);
+        v2[i]=v[i]+Dv*lv+r-(F+kk)*v[i];
+      }
+    }
+    u.set(u2); v.set(v2);
+  }
+  function size(){
+    const div = w<600?3.4:7;
+    gw=Math.max(88,Math.round(w/div)); gh=Math.max(56,Math.round(h/div));
+    off.width=gw; off.height=gh;
+    octx=off.getContext('2d',{willReadFrequently:true});
+    img=octx.createImageData(gw,gh);
+    u=new Float32Array(gw*gh); v=new Float32Array(gw*gh);
+    u2=new Float32Array(gw*gh); v2=new Float32Array(gw*gh);
+    u.fill(1);
+    for(let s=0;s<24;s++){
+      const sx=(Math.random()*gw)|0, sy=(Math.random()*gh)|0, r=2+((Math.random()*3)|0);
+      for(let y=-r;y<=r;y++)for(let x=-r;x<=r;x++){
+        const i=((sy+y+gh)%gh)*gw+((sx+x+gw)%gw);
+        v[i]=0.5; u[i]=0.25;
+      }
+    }
+    for(let s=0;s<260;s++) step();
+  }
+  size();
+  return {
+    resize(nw,nh){w=nw;h=nh;size();last=-9},
+    frame(t){
+      if(t-last>0.033){
+        last=t;
+        for(let s=0;s<5;s++) step();
+        const d=img.data;
+        for(let i=0;i<gw*gh;i++){
+          let a=v[i]/0.34; a=a<0?0:a>1?1:a; a*=0.14*K;
+          const o=i*4;
+          d[o]  =PAPER_RGB[0]+(INK_RGB[0]-PAPER_RGB[0])*a;
+          d[o+1]=PAPER_RGB[1]+(INK_RGB[1]-PAPER_RGB[1])*a;
+          d[o+2]=PAPER_RGB[2]+(INK_RGB[2]-PAPER_RGB[2])*a;
+          d[o+3]=255;
+        }
+        octx.putImageData(img,0,0);
+      }
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      ctx.imageSmoothingEnabled=true; ctx.imageSmoothingQuality='high';
+      ctx.drawImage(off,0,0,w,h);
+    }
+  };
+}
+
+/* ═══════════════ 10. FOURIER EPICYCLES ═══════════════
+   A chain of rotating vectors — any closed curve is the sum
+   of circles. The geometric meaning of the Fourier series. */
+function makeEpi(ctx,w,h,K){
+  const T=[
+    {k: 1,a:1.00,p:0.0},{k:-2,a:0.52,p:1.1},{k: 3,a:0.34,p:2.3},
+    {k:-5,a:0.22,p:0.7},{k: 7,a:0.15,p:3.1},{k:-11,a:0.09,p:1.9}
+  ];
+  return {
+    resize(nw,nh){w=nw;h=nh},
+    frame(t){
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      const R=Math.min(w,h)*0.29, cx=w/2, cy=h/2, dr=t*0.05;
+      const pos=th=>{
+        let x=0,y=0;
+        for(const c of T){const a=c.k*th+c.p+dr*c.k*0.35; x+=c.a*Math.cos(a); y+=c.a*Math.sin(a);}
+        return [cx+x*R, cy+y*R];
+      };
+      ctx.strokeStyle=ink(0.19*K); ctx.lineWidth=0.9;
+      ctx.beginPath();
+      const ST=520;
+      for(let i=0;i<=ST;i++){const q=pos(i/ST*TAU); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);}
+      ctx.closePath(); ctx.stroke();
+      const th=(t*0.5)%TAU;
+      let x=cx,y=cy;
+      ctx.lineWidth=0.7;
+      for(const c of T){
+        const a=c.k*th+c.p+dr*c.k*0.35, r=c.a*R;
+        ctx.strokeStyle=ink(0.085*K);
+        ctx.beginPath(); ctx.arc(x,y,r,0,TAU); ctx.stroke();
+        const nx=x+r*Math.cos(a), ny=y+r*Math.sin(a);
+        ctx.strokeStyle=ink(0.15*K);
+        ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(nx,ny); ctx.stroke();
+        x=nx;y=ny;
+      }
+      ctx.fillStyle=navy(0.45*K);
+      ctx.beginPath(); ctx.arc(x,y,1.9,0,TAU); ctx.fill();
+    }
+  };
+}
+
+/* ═══════════════ 11. KEPLER ROSETTE ═══════════════
+   Orbits whose perihelion slowly precesses — the same
+   effect that confirmed general relativity at Mercury. */
+function makeKepler(ctx,w,h,K){
+  const ORB=[{e:0.62,k:0.972,turns:14},{e:0.45,k:0.984,turns:16},{e:0.74,k:0.958,turns:12}];
+  return {
+    resize(nw,nh){w=nw;h=nh},
+    frame(t){
+      ctx.fillStyle=PAPER; ctx.fillRect(0,0,w,h);
+      const S=Math.min(w,h)*0.46;
+      ctx.save(); ctx.translate(w/2,h/2); ctx.rotate(t*0.022);
+      ctx.lineWidth=0.75;
+      ORB.forEach((o,idx)=>{
+        const k=o.k+0.004*Math.sin(t*0.05+idx);
+        const p=S*(1-o.e)*0.95;
+        ctx.strokeStyle=ink((0.15-idx*0.028)*K);
+        ctx.beginPath();
+        const N=o.turns*120;
+        for(let i=0;i<=N;i++){
+          const th=i/120*TAU, r=p/(1+o.e*Math.cos(k*th));
+          const x=r*Math.cos(th), y=r*Math.sin(th);
+          i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+        }
+        ctx.stroke();
+      });
+      ctx.fillStyle=navy(0.32*K);
+      ctx.beginPath(); ctx.arc(0,0,2,0,TAU); ctx.fill();
+      ctx.restore();
+    }
+  };
+}
+
+/* ═══════════════ registry ═══════════════ */
+const ANIMS=[
+  {id:'contour', name:'Contour Field',  zh:'等值线场',
+   desc:'三个缓慢漂移的波源叠加成标量场，实时绘制其等值线。像不断重塑的地形图。',
+   basis:'Wave interference · level sets', make:makeContour},
+  {id:'flow', name:'Flow Field', zh:'流场',
+   desc:'无质量示踪粒子在解析速度场中被平流输运，留下丝状流线。流体力学的层流形态。',
+   basis:'Fluid dynamics · advection', make:makeFlow},
+  {id:'chladni', name:'Chladni Figures', zh:'克拉尼图形',
+   desc:'振动方板的节线：cos(nπx)cos(mπy) − cos(mπx)cos(nπy) = 0，模态数连续变化。',
+   basis:'Standing waves · nodal lines', make:makeChladni},
+  {id:'harmo', name:'Harmonograph', zh:'谐波记录仪',
+   desc:'两个阻尼摆分别驱动 x、y，笔迹画出衰减的李萨如玫瑰线，画完淡出重来。',
+   basis:'Damped oscillators · Lissajous', make:makeHarmo},
+  {id:'lorenz', name:'Lorenz Attractor', zh:'洛伦兹吸引子',
+   desc:'确定性混沌的经典方程组，轨迹永不重复地缠绕出双翼，并极缓慢地旋转。',
+   basis:'Deterministic chaos · strange attractor', make:makeLorenz},
+  {id:'julia', name:'Julia Set', zh:'茱莉亚集',
+   desc:'z ← z² + c，参数 c 沿复平面圆周移动，分形边界随之连续变形。低分辨率渲染带来柔和质感。',
+   basis:'Fractal · complex dynamics', make:makeJulia},
+
+  {id:'quasi', name:'Quasicrystal', zh:'准晶',
+   desc:'五束等角度平面波叠加，生成十重对称、永不重复的准周期图案。2011 年诺贝尔化学奖的对象。',
+   basis:'Quasiperiodic order · 10-fold symmetry', make:makeQuasi},
+  {id:'moire', name:'Moiré Superlattice', zh:'莫尔超晶格',
+   desc:'两层三角晶格扭转几度，涌现出莫尔超晶格 —— 魔角石墨烯超导的物理基础。',
+   basis:'Twisted bilayer · magic angle', make:makeMoire},
+  {id:'rd', name:'Reaction–Diffusion', zh:'反应扩散',
+   desc:'Gray–Scott 模型：两种化学物质边扩散边反应，自发涌现迷宫状图案。图灵 1952 年的形态发生理论。',
+   basis:'Turing patterns · morphogenesis', make:makeRD},
+  {id:'epi', name:'Fourier Epicycles', zh:'傅里叶本轮',
+   desc:'一串旋转向量首尾相接，笔尖画出闭合曲线 —— 傅里叶级数的几何形态。',
+   basis:'Fourier series · rotating vectors', make:makeEpi},
+  {id:'kepler', name:'Kepler Rosette', zh:'开普勒玫瑰线',
+   desc:'近日点缓慢进动的轨道族，织成玫瑰花环。水星轨道的这一效应曾验证广义相对论。',
+   basis:'Orbital precession · celestial mechanics', make:makeKepler},
+];
+
+/* ═══════════════ engine ═══════════════ */
+const insts=[];
+function mount(canvas, def, K){
+  const ctx=canvas.getContext('2d');
+  let a=null, w=0,h=0, dpr=Math.min(devicePixelRatio||1,2);
+  function fit(){
+    const r=canvas.getBoundingClientRect();
+    if(r.width<2||r.height<2) return;
+    w=r.width; h=r.height;
+    canvas.width=Math.round(w*dpr); canvas.height=Math.round(h*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(!a) a=def.make(ctx,w,h,K); else a.resize(w,h);
+  }
+  fit();
+  new ResizeObserver(fit).observe(canvas);
+  const inst={canvas,visible:true,frame(t){ if(a) a.frame(t); },refit:fit};
+  return inst;
+}
+
+/* build cards */
+const CN='零一二三四五六七八九十'.split('');
+const numZh=n=> n<=10 ? CN[n] : (n<20 ? '十'+(n%10?CN[n%10]:'') : n);
+document.getElementById('labH1').textContent=`${numZh(ANIMS.length)}种动效方案`;
+const grid=document.getElementById('grid');
+ANIMS.forEach((def,i)=>{
+  const card=document.createElement('div'); card.className='card';
+  card.innerHTML=`
+    <div class="stage" data-i="${i}">
+      <canvas></canvas>
+      <div class="stage-idx">${String(i+1).padStart(2,'0')}</div>
+      <div class="stage-open">Preview as hero →</div>
+    </div>
+    <div class="meta">
+      <h3>${def.name}</h3>
+      <div class="zh">${def.zh}</div>
+      <p>${def.desc}</p>
+      <div class="basis">${def.basis}</div>
+    </div>`;
+  grid.appendChild(card);
+  const inst=mount(card.querySelector('canvas'), def, 1);
+  insts.push(inst);
+  new IntersectionObserver(es=>es.forEach(e=>inst.visible=e.isIntersecting),{threshold:0}).observe(card);
+  card.querySelector('.stage').addEventListener('click',()=>openOv(i));
+});
+
+/* overlay */
+const ov=document.getElementById('ov'), ovCanvas=document.getElementById('ovCanvas');
+const ovName=document.getElementById('ovName'), ovHint=document.getElementById('ovHint');
+let ovInst=null, ovIdx=0, ovK=1, ovOpen=false;
+const KS=[0.55,1,1.7];
+
+function buildOv(){
+  const ctx=ovCanvas.getContext('2d');
+  const dpr=Math.min(devicePixelRatio||1,2);
+  const w=innerWidth,h=innerHeight;
+  ovCanvas.width=Math.round(w*dpr); ovCanvas.height=Math.round(h*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  const a=ANIMS[ovIdx].make(ctx,w,h,ovK);
+  ovInst={frame:t=>a.frame(t)};
+  ovName.textContent=`${String(ovIdx+1).padStart(2,'0')} — ${ANIMS[ovIdx].name} / ${ANIMS[ovIdx].zh}`;
+  ovHint.textContent=`${ANIMS[ovIdx].basis}`;
+}
+function openOv(i){ ovIdx=i; ovOpen=true; ov.classList.add('on'); buildOv(); }
+function closeOv(){ ovOpen=false; ov.classList.remove('on'); ovInst=null; }
+document.getElementById('closeBtn').onclick=closeOv;
+document.getElementById('prevBtn').onclick=()=>{ovIdx=(ovIdx-1+ANIMS.length)%ANIMS.length;buildOv()};
+document.getElementById('nextBtn').onclick=()=>{ovIdx=(ovIdx+1)%ANIMS.length;buildOv()};
+document.querySelectorAll('.ovbtn[data-i]').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.ovbtn[data-i]').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); ovK=KS[+b.dataset.i]; buildOv();
+  };
+});
+addEventListener('keydown',e=>{
+  if(!ovOpen) return;
+  if(e.key==='Escape') closeOv();
+  if(e.key==='ArrowRight'){ovIdx=(ovIdx+1)%ANIMS.length;buildOv()}
+  if(e.key==='ArrowLeft'){ovIdx=(ovIdx-1+ANIMS.length)%ANIMS.length;buildOv()}
+});
+addEventListener('resize',()=>{ if(ovOpen) buildOv(); });
+
+/* single RAF loop */
+let t0=performance.now();
+function loop(now){
+  const t=(now-t0)/1000;
+  if(ovOpen){ if(ovInst) ovInst.frame(t); }
+  else { for(const it of insts) if(it.visible) it.frame(t); }
+  requestAnimationFrame(loop);
+}
+if(REDUCE){
+  for(const it of insts) it.frame(3);
+}else{
+  requestAnimationFrame(loop);
+}
+</script>
+</body>
+</html>

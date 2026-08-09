@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Dot Wave — FountainBridge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400..700;1,400..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--paper:#FCFCFA;--ink:#0B0B0E;--mut:#6A6A72;--navy:#002D99}
+html,body{height:100%}
+body{
+  font-family:'Instrument Sans',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
+  background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;
+  letter-spacing:-.01em;overflow:hidden;
+}
+
+/* the wave sits at the bottom of the page, like the reference */
+#wave{
+  position:fixed;left:0;right:0;bottom:0;
+  width:100%;height:58%;
+  display:block;pointer-events:none;z-index:0;
+}
+
+.hero{
+  position:relative;z-index:1;height:100%;max-width:1360px;margin:0 auto;
+  padding:0 44px;display:flex;flex-direction:column;justify-content:center;
+}
+.k{
+  font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--mut);
+  display:flex;align-items:center;gap:14px;margin-bottom:32px;
+}
+.k i{width:8px;height:8px;border-radius:50%;background:var(--navy);display:block}
+h1{
+  font-size:clamp(48px,8.6vw,132px);font-weight:620;letter-spacing:-.052em;
+  line-height:.94;max-width:12ch;margin-bottom:40px;
+}
+h1 .u{position:relative;white-space:nowrap}
+h1 .u::after{content:'';position:absolute;left:0;bottom:.02em;height:.045em;width:100%;background:var(--navy)}
+.sub{font-size:clamp(16px,1.5vw,20px);color:var(--mut);line-height:1.55;max-width:440px}
+@media(max-width:640px){ .hero{padding:0 22px;justify-content:flex-start;padding-top:110px} }
+</style>
+</head>
+<body>
+
+<canvas id="wave"></canvas>
+
+<div class="hero">
+  <div class="k"><i></i><span>Early-Stage Venture · Frontier Technology · Shanghai</span></div>
+  <h1>Conviction before <span class="u">consensus.</span></h1>
+  <p class="sub">We back founders building frontier technology — writing the first check, often before the company exists.</p>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════
+   Dot wave — a plane of points whose height is driven by 3D
+   simplex noise, viewed through a narrow-angle perspective camera.
+
+   Parameters mirror the reference implementation; only the colour
+   is changed to the FountainBridge brand blue.
+   ══════════════════════════════════════════════════════════════ */
+const CFG = {
+  color:  '#002D99',   // brand blue
+  segs:   50,          // plane subdivisions → 51 × 51 points
+  planeW: 4,           // plane width  (world units)
+  planeD: 3,           // plane depth
+  amp:    0.5,         // noise amplitude   → z = amp * noise(...)
+  nScale: 0.5,         // noise frequency   → noise(x/2, y/2, …)
+  tScale: 0.125,       // time rate         → t_seconds / 8
+  dot:    2.0,         // dot radius in px at reference distance
+  fov:    12,          // camera field of view (degrees)
+  eye:    [4, 2, 8]    // camera position, looking at the origin
+};
+
+/* ── 3D simplex noise (Gustavson / Wagner, public domain) ── */
+function SimplexNoise(r){
+  r=r||Math;
+  this.p=new Uint8Array(256); this.perm=new Uint8Array(512); this.pm=new Uint8Array(512);
+  for(let i=0;i<256;i++) this.p[i]=i;
+  for(let i=255;i>0;i--){const n=(i+1)*r.random()|0,q=this.p[i];this.p[i]=this.p[n];this.p[n]=q;}
+  for(let i=0;i<512;i++){this.perm[i]=this.p[i&255];this.pm[i]=this.perm[i]%12;}
+}
+const G3=new Float32Array([1,1,0,-1,1,0,1,-1,0,-1,-1,0,1,0,1,-1,0,1,1,0,-1,-1,0,-1,0,1,1,0,-1,1,0,1,-1,0,-1,-1]);
+SimplexNoise.prototype.noise3D=function(xin,yin,zin){
+  const perm=this.perm,pm=this.pm,F3=1/3,G=1/6;
+  let n0,n1,n2,n3;
+  const s=(xin+yin+zin)*F3;
+  const i=Math.floor(xin+s),j=Math.floor(yin+s),k=Math.floor(zin+s);
+  const t=(i+j+k)*G,x0=xin-(i-t),y0=yin-(j-t),z0=zin-(k-t);
+  let i1,j1,k1,i2,j2,k2;
+  if(x0>=y0){
+    if(y0>=z0){i1=1;j1=0;k1=0;i2=1;j2=1;k2=0;}
+    else if(x0>=z0){i1=1;j1=0;k1=0;i2=1;j2=0;k2=1;}
+    else{i1=0;j1=0;k1=1;i2=1;j2=0;k2=1;}
+  }else{
+    if(y0<z0){i1=0;j1=0;k1=1;i2=0;j2=1;k2=1;}
+    else if(x0<z0){i1=0;j1=1;k1=0;i2=0;j2=1;k2=1;}
+    else{i1=0;j1=1;k1=0;i2=1;j2=1;k2=0;}
+  }
+  const x1=x0-i1+G,y1=y0-j1+G,z1=z0-k1+G;
+  const x2=x0-i2+2*G,y2=y0-j2+2*G,z2=z0-k2+2*G;
+  const x3=x0-1+3*G,y3=y0-1+3*G,z3=z0-1+3*G;
+  const ii=i&255,jj=j&255,kk=k&255; let g;
+  let t0=.6-x0*x0-y0*y0-z0*z0; if(t0<0)n0=0;else{g=pm[ii+perm[jj+perm[kk]]]*3;t0*=t0;n0=t0*t0*(G3[g]*x0+G3[g+1]*y0+G3[g+2]*z0);}
+  let t1=.6-x1*x1-y1*y1-z1*z1; if(t1<0)n1=0;else{g=pm[ii+i1+perm[jj+j1+perm[kk+k1]]]*3;t1*=t1;n1=t1*t1*(G3[g]*x1+G3[g+1]*y1+G3[g+2]*z1);}
+  let t2=.6-x2*x2-y2*y2-z2*z2; if(t2<0)n2=0;else{g=pm[ii+i2+perm[jj+j2+perm[kk+k2]]]*3;t2*=t2;n2=t2*t2*(G3[g]*x2+G3[g+1]*y2+G3[g+2]*z2);}
+  let t3=.6-x3*x3-y3*y3-z3*z3; if(t3<0)n3=0;else{g=pm[ii+1+perm[jj+1+perm[kk+1]]]*3;t3*=t3;n3=t3*t3*(G3[g]*x3+G3[g+1]*y3+G3[g+2]*z3);}
+  return 32*(n0+n1+n2+n3);
+};
+
+/* ── setup ── */
+const cv=document.getElementById('wave'), ctx=cv.getContext('2d');
+const simplex=new SimplexNoise();
+let W=0,H=0,DPR=1;
+
+function fit(){
+  DPR=Math.min(devicePixelRatio||1,2);
+  const r=cv.getBoundingClientRect();
+  W=r.width; H=r.height;
+  cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR);
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+addEventListener('resize',fit);
+
+/* camera basis: look from CFG.eye toward the origin */
+const EYE=CFG.eye;
+let FW,RT,UP;
+(function buildCam(){
+  let fx=-EYE[0],fy=-EYE[1],fz=-EYE[2];
+  const fl=Math.hypot(fx,fy,fz); fx/=fl;fy/=fl;fz/=fl;
+  const up=[0,1,0];                                   // right = forward × up
+  let rx=fy*up[2]-fz*up[1], ry=fz*up[0]-fx*up[2], rz=fx*up[1]-fy*up[0];
+  const rl=Math.hypot(rx,ry,rz); rx/=rl;ry/=rl;rz/=rl;
+  FW=[fx,fy,fz]; RT=[rx,ry,rz];
+  UP=[ry*fz-rz*fy, rz*fx-rx*fz, rx*fy-ry*fx];        // r × f
+})();
+
+const out=[0,0,0];
+function project(px,py,pz){
+  const dx=px-EYE[0], dy=py-EYE[1], dz=pz-EYE[2];
+  const vz=dx*FW[0]+dy*FW[1]+dz*FW[2];
+  if(vz<=.01) return null;
+  const vx=dx*RT[0]+dy*RT[1]+dz*RT[2];
+  const vy=dx*UP[0]+dy*UP[1]+dz*UP[2];
+  const tanH=Math.tan(CFG.fov*Math.PI/360);
+  out[0]=W/2+(vx/vz)/(tanH*(W/H))*W/2;
+  out[1]=H/2-(vy/vz)/tanH*H/2 + H*0.16;
+  out[2]=vz;
+  return out;
+}
+
+/* browsers already pause rAF in background tabs, so no visibility handling
+   is needed here — only reduced-motion, which they don't handle for us */
+const REDUCE=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function render(now){
+  requestAnimationFrame(render);
+  const t=(REDUCE?4000:now)*0.001*CFG.tScale;
+  const n=CFG.segs, hw=CFG.planeW/2, hd=CFG.planeD/2;
+
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle=CFG.color;
+
+  for(let r=0;r<=n;r++){
+    const z=-hd+(r/n)*CFG.planeD;
+    for(let c=0;c<=n;c++){
+      const x=-hw+(c/n)*CFG.planeW;
+      const h=CFG.amp*simplex.noise3D(x*CFG.nScale, z*CFG.nScale, t);
+      const s=project(x,h,z);
+      if(!s) continue;
+      if(s[0]<-6||s[0]>W+6||s[1]<-6||s[1]>H+6) continue;
+      // fade with distance so the field recedes
+      const fade=Math.max(.15, Math.min(1, 1.6-(s[2]-6)/6));
+      ctx.globalAlpha=0.55*fade;
+      const rad=Math.max(.4, CFG.dot*(EYE[2]/s[2])*fade);
+      ctx.beginPath(); ctx.arc(s[0],s[1],rad,0,6.283); ctx.fill();
+    }
+  }
+  ctx.globalAlpha=1;
+}
+
+fit();
+requestAnimationFrame(render);
+</script>
+</body>
+</html>
