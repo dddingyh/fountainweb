@@ -296,23 +296,32 @@ section{scroll-margin-top:80px}
 .fp-dot{width:26px;height:2px;background:rgba(255,255,255,.32);border-radius:2px;cursor:pointer;transition:background .3s,width .3s}
 .fp-dot.on{background:#fff;width:42px}
 
-/* index of others */
-.idx{margin-top:96px}
-.idx-cap{
+/* logo wall */
+.lw-wrap{margin-top:96px}
+.lw-cap{
   font-family:'Geist Mono',monospace;font-size:11.5px;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--fnt);margin-bottom:28px;
+  text-transform:uppercase;color:var(--fnt);margin-bottom:32px;
   display:flex;align-items:center;gap:12px;
 }
-.idx-cap::after{content:'';flex:1;height:1px;background:var(--line)}
-.idx-grid{display:grid;grid-template-columns:repeat(3,1fr);column-gap:56px}
-.idx-it{
-  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
-  padding:19px 0;border-bottom:1px solid var(--line);
-  font-size:18px;font-weight:550;letter-spacing:-.02em;
-  transition:color .2s;
+.lw-cap::after{content:'';flex:1;height:1px;background:var(--line)}
+.lw{display:grid;grid-template-columns:repeat(auto-fill,minmax(186px,1fr));
+  border:1px solid var(--line)}
+.lw-cell{
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  min-height:120px;display:flex;align-items:center;justify-content:center;
+  padding:22px;transition:background .35s var(--ease);
 }
-.idx-it:hover{color:var(--navy)}
-.idx-it span{font-family:'Geist Mono',monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--fnt);font-weight:400}
+.lw-cell:hover{background:rgba(0,45,153,.025)}
+.lw-cell img{
+  max-height:30px;max-width:74%;width:auto;object-fit:contain;
+  filter:brightness(0);opacity:.62;transition:opacity .35s var(--ease);
+}
+.lw-cell:hover img{opacity:.95}
+.lw-mark{
+  font-size:17px;font-weight:500;letter-spacing:-.01em;text-align:center;
+  color:var(--ink);opacity:.55;transition:opacity .35s var(--ease);
+}
+.lw-cell:hover .lw-mark{opacity:.9}
 
 /* ────────────────────────────────
    TEAM
@@ -405,7 +414,11 @@ section{scroll-margin-top:80px}
   .lg-yr{text-align:left}
   .lg-yr b{display:inline}
   .lg-yr span{display:inline;margin-left:10px}
-  .idx-grid{grid-template-columns:1fr}
+  .lw-wrap{margin-top:60px}
+  .lw{grid-template-columns:repeat(2,1fr)}
+  .lw-cell{min-height:92px;padding:16px}
+  .lw-cell img{max-height:26px}
+  .lw-mark{font-size:15px}
   .team-grid{grid-template-columns:1fr}
   .tm{padding:24px 0!important;border-left:none!important}
   .f-grid{grid-template-columns:1fr;gap:44px}
@@ -573,6 +586,32 @@ section{scroll-margin-top:80px}
             </div>
           </div>
 
+          <!-- Futuring -->
+          <div class="fp-slide">
+            <div class="fp-bg" style="background-image:url('assets/co-futuring.jpg')"></div>
+            <div class="fp-scrim"></div>
+            <div class="fp-body">
+              <div class="fp-logo"><img src="assets/logo-futuring.png" alt="Futuring"></div>
+              <div class="fp-sector" data-en="Home Robotics · Embodied AI" data-zh="家庭机器人 · 具身智能">Home Robotics · Embodied AI</div>
+              <div class="fp-name" data-html="1" data-en="Futuring" data-zh="Futuring<span class='fp-cn'> 未来不远</span>">Futuring</div>
+              <p class="fp-desc" data-en="China's first general-purpose home robot company, building embodied-AI robots already serving hundreds of real households. We joined as an angel-round investor." data-zh="中国首个聚焦家庭场景的通用机器人公司，其具身智能机器人已进入数百个真实家庭。我们作为天使轮投资方参与。">China's first general-purpose home robot company, building embodied-AI robots already serving hundreds of real households. We joined as an angel-round investor.</p>
+              <div class="fp-year" data-en="Invested 2026 · Angel round" data-zh="投资于 2026 · 天使轮">Invested 2026 · Angel round</div>
+            </div>
+          </div>
+
+          <!-- Epigenic -->
+          <div class="fp-slide">
+            <div class="fp-bg" style="background-image:url('assets/co-epigenic.jpg')"></div>
+            <div class="fp-scrim"></div>
+            <div class="fp-body">
+              <div class="fp-logo"><img src="assets/logo-epigenic.svg" alt="Epigenic"></div>
+              <div class="fp-sector" data-en="Biotech · Epigenetic Gene Editing" data-zh="生物科技 · 表观遗传基因编辑">Biotech · Epigenetic Gene Editing</div>
+              <div class="fp-name" data-html="1" data-en="Epigenic" data-zh="Epigenic<span class='fp-cn'> 益杰立科</span>">Epigenic</div>
+              <p class="fp-desc" data-en="A pioneer in epigenetic gene-regulation therapeutics, developing a new class of medicines that treat disease without cutting DNA." data-zh="表观遗传基因调控疗法的先行者，开发无需切割 DNA 即可治疗疾病的新一代药物。">A pioneer in epigenetic gene-regulation therapeutics, developing a new class of medicines that treat disease without cutting DNA.</p>
+              <div class="fp-year" data-en="Early-stage portfolio" data-zh="早期投资组合">Early-stage portfolio</div>
+            </div>
+          </div>
+
         </div>
 
     <button class="fp-arrow fp-prev" id="fpPrev" aria-label="Previous">&#8592;</button>
@@ -580,22 +619,31 @@ section{scroll-margin-top:80px}
     <div class="fp-dots" id="fpDots"></div>
   </div>
 
-  <div class="wrap sec-grid">
-    <div></div>
-    <div>
-      <div class="idx r d2">
-        <div class="idx-cap" data-en="Selected portfolio" data-zh="部分投资组合">Selected portfolio</div>
-        <div class="idx-grid">
-          <div class="idx-it">MetaX <span data-en="Semiconductor" data-zh="半导体">Semiconductor</span></div>
-          <div class="idx-it">Turing Quantum <span data-en="Quantum" data-zh="量子计算">Quantum</span></div>
-          <div class="idx-it">StairMed <span data-en="BMI" data-zh="脑机接口">BMI</span></div>
-          <div class="idx-it">Freebeat <span data-en="Technology" data-zh="科技">Technology</span></div>
-          <div class="idx-it">San Liang <span data-en="Consumer" data-zh="消费">Consumer</span></div>
-          <div class="idx-it">Jing Mian Tang <span data-en="Consumer" data-zh="消费">Consumer</span></div>
-          <div class="idx-it">Shu Du Feng <span data-en="Food" data-zh="餐饮">Food</span></div>
-          <div class="idx-it">Da Shi Xiong <span data-en="Food" data-zh="餐饮">Food</span></div>
-          <div class="idx-it">Xiong Da Ye <span data-en="Food" data-zh="餐饮">Food</span></div>
-        </div>
+  <div class="wrap">
+    <div class="lw-wrap r d2">
+      <div class="lw-cap" data-en="Selected portfolio" data-zh="部分投资组合">Selected portfolio</div>
+      <div class="lw">
+        <div class="lw-cell"><img src="assets/logo-metax.png" alt="MetaX"></div>
+        <div class="lw-cell"><img src="assets/logo-turingq.png" alt="Turing Quantum"></div>
+        <div class="lw-cell"><img src="assets/logo-stairmed.png" alt="StairMed"></div>
+        <div class="lw-cell"><img src="assets/logo-epigenic.svg" alt="Epigenic"></div>
+        <div class="lw-cell"><img src="assets/logo-futuring.png" alt="Futuring"></div>
+        <div class="lw-cell"><span class="lw-mark">Chainbase</span></div>
+        <div class="lw-cell"><span class="lw-mark">MatrixOrigin</span></div>
+        <div class="lw-cell"><span class="lw-mark">容钠新能源</span></div>
+        <div class="lw-cell"><span class="lw-mark">遇贤微电子</span></div>
+        <div class="lw-cell"><span class="lw-mark">亿珂气体</span></div>
+        <div class="lw-cell"><span class="lw-mark">元川微</span></div>
+        <div class="lw-cell"><span class="lw-mark">珞方生物</span></div>
+        <div class="lw-cell"><span class="lw-mark">和创新能源</span></div>
+        <div class="lw-cell"><span class="lw-mark">迅铂</span></div>
+        <div class="lw-cell"><span class="lw-mark">伊米诺康</span></div>
+        <div class="lw-cell"><span class="lw-mark">Freebeat</span></div>
+        <div class="lw-cell"><span class="lw-mark">San Liang</span></div>
+        <div class="lw-cell"><span class="lw-mark">Jing Mian Tang</span></div>
+        <div class="lw-cell"><span class="lw-mark">Shu Du Feng</span></div>
+        <div class="lw-cell"><span class="lw-mark">Da Shi Xiong</span></div>
+        <div class="lw-cell"><span class="lw-mark">Xiong Da Ye</span></div>
       </div>
     </div>
   </div>
