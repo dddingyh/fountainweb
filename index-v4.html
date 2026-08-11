@@ -311,10 +311,15 @@ section{scroll-margin-top:80px}
   padding:28px;transition:background .35s var(--ease);
 }
 .lw-cell:hover{background:rgba(0,45,153,.025)}
+/* wordmark logos: normalise to a common cap-height, cap the width so the
+   widest wordmarks don't dominate */
 .lw-cell img{
-  max-height:38px;max-width:66%;width:auto;object-fit:contain;
+  max-height:30px;max-width:170px;width:auto;height:auto;object-fit:contain;
   filter:brightness(0);opacity:.6;transition:opacity .35s var(--ease);
 }
+/* icon-only / near-square marks get a larger box so their optical size
+   matches the wordmarks instead of looking tiny at cap-height */
+.lw-cell img.mark{max-height:52px;max-width:64px}
 .lw-cell:hover img{opacity:.95}
 .lw-mark{
   font-size:19px;font-weight:500;letter-spacing:-.01em;text-align:center;
@@ -416,7 +421,8 @@ section{scroll-margin-top:80px}
   .lw-wrap{margin-top:60px}
   .lw{grid-template-columns:repeat(2,1fr)}
   .lw-cell{min-height:92px;padding:16px}
-  .lw-cell img{max-height:26px}
+  .lw-cell img{max-height:26px;max-width:120px}
+  .lw-cell img.mark{max-height:44px;max-width:52px}
   .lw-mark{font-size:15px}
   .team-grid{grid-template-columns:1fr}
   .tm{padding:24px 0!important;border-left:none!important}
@@ -631,7 +637,7 @@ section{scroll-margin-top:80px}
         <div class="lw-cell"><img src="assets/logo-matrixorigin.svg" alt="MatrixOrigin"></div>
         <div class="lw-cell"><img src="assets/logo-rongna.png" alt="容钠新能源"></div>
         <div class="lw-cell"><img src="assets/logo-ysemi.png" alt="遇贤微电子"></div>
-        <div class="lw-cell"><img src="assets/logo-eaco.png" alt="亿珂气体"></div>
+        <div class="lw-cell"><img class="mark" src="assets/logo-eaco.png" alt="亿珂气体"></div>
         <div class="lw-cell"><img src="assets/logo-archeflowx.png" alt="元川微"></div>
         <div class="lw-cell"><img src="assets/logo-polyncure.png" alt="珞方生物"></div>
         <div class="lw-cell"><img src="assets/logo-hechuang.png" alt="和创新能源"></div>
