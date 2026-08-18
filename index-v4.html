@@ -280,6 +280,16 @@ section{scroll-margin-top:80px}
 .fp-logo img{height:100%;width:auto;filter:brightness(0) invert(1);opacity:.92}
 .fp-sector{font-family:'Geist Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.72);margin-bottom:14px}
 .fp-name{font-size:clamp(30px,3.6vw,50px);font-weight:600;letter-spacing:-.035em;line-height:1;margin-bottom:16px}
+/* Chinese display text: the tight tracking tuned for Latin looks cramped on
+   Han characters — relax it and prevent awkward mid-phrase wrapping */
+:root[lang="zh-CN"] .fp-name,
+:root[lang="zh-CN"] .hero-h1,
+:root[lang="zh-CN"] .approach-lead,
+:root[lang="zh-CN"] .band-h,
+:root[lang="zh-CN"] .co-title,
+:root[lang="zh-CN"] .team-h2,
+:root[lang="zh-CN"] .f-state{letter-spacing:0}
+:root[lang="zh-CN"] .fp-name{font-weight:600}
 .fp-cn{font-size:.5em;font-weight:400;color:rgba(255,255,255,.55);letter-spacing:0}
 .fp-desc{font-size:clamp(14px,1.15vw,16px);line-height:1.6;color:rgba(255,255,255,.82);margin-bottom:22px}
 .fp-year{font-family:'Geist Mono',monospace;font-size:12px;letter-spacing:.04em;color:#fff;
@@ -557,7 +567,7 @@ section{scroll-margin-top:80px}
             <div class="fp-body">
               <div class="fp-logo"><img src="assets/logo-metax.png" alt="MetaX"></div>
               <div class="fp-sector" data-en="Semiconductor · AI Compute" data-zh="半导体 · AI 算力">Semiconductor · AI Compute</div>
-              <div class="fp-name">MetaX</div>
+              <div class="fp-name" data-en="MetaX" data-zh="沐曦">MetaX</div>
               <p class="fp-desc" data-en="Leading GPU chip company in China, founded by top R&D leaders from AMD. We invested before the company was founded." data-zh="中国领先的 GPU 芯片公司，由 AMD 顶尖研发负责人创立。我们在公司成立前即完成投资。">Leading GPU chip company in China, founded by top R&amp;D leaders from AMD. We invested before the company was founded.</p>
               <div class="fp-year" data-en="Invested 2019 · Seed round" data-zh="投资于 2019 · 种子轮">Invested 2019 · Seed round</div>
             </div>
@@ -570,9 +580,7 @@ section{scroll-margin-top:80px}
             <div class="fp-body">
               <div class="fp-logo"><img src="assets/logo-turingq.png" alt="Turing Quantum"></div>
               <div class="fp-sector" data-en="Quantum Computing" data-zh="量子计算">Quantum Computing</div>
-              <div class="fp-name" data-html="1"
-                   data-en="Turing Quantum"
-                   data-zh="Turing Quantum<span class='fp-cn'> 图灵量子</span>">Turing Quantum</div>
+              <div class="fp-name" data-en="Turing Quantum" data-zh="图灵量子">Turing Quantum</div>
               <p class="fp-desc" data-en="China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line." data-zh="中国首家且领先的光子量子计算公司。我们参与联合创始，协助建立全球首条光子量子芯片量产线。">China's first and leading photonic quantum computing company. We co-founded the company and helped build the world's first photonic quantum chip line.</p>
               <div class="fp-year" data-en="Invested 2020 · First round" data-zh="投资于 2020 · 首轮">Invested 2020 · First round</div>
             </div>
@@ -585,7 +593,7 @@ section{scroll-margin-top:80px}
             <div class="fp-body">
               <div class="fp-logo"><img src="assets/logo-stairmed.png" alt="StairMed"></div>
               <div class="fp-sector" data-en="Brain-Machine Interface" data-zh="脑机接口">Brain-Machine Interface</div>
-              <div class="fp-name">StairMed</div>
+              <div class="fp-name" data-en="StairMed" data-zh="阶梯医疗">StairMed</div>
               <p class="fp-desc" data-en="A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round." data-zh="具备全球竞争力的领先脑机接口公司。我们是首轮唯一投资方。">A leading brain-machine interface company with global competitive strength. We were the sole investor in the first round.</p>
               <div class="fp-year" data-en="Invested 2021 · First round" data-zh="投资于 2021 · 首轮">Invested 2021 · First round</div>
             </div>
@@ -598,8 +606,8 @@ section{scroll-margin-top:80px}
             <div class="fp-body">
               <div class="fp-logo"><img src="assets/logo-futuring.png" alt="Futuring"></div>
               <div class="fp-sector" data-en="Home Robotics · Embodied AI" data-zh="家庭机器人 · 具身智能">Home Robotics · Embodied AI</div>
-              <div class="fp-name" data-html="1" data-en="Futuring" data-zh="Futuring<span class='fp-cn'> 未来不远</span>">Futuring</div>
-              <p class="fp-desc" data-en="China's first general-purpose home robot company, building embodied-AI robots already serving hundreds of real households. We joined as an angel-round investor." data-zh="中国首个聚焦家庭场景的通用机器人公司，其具身智能机器人已进入数百个真实家庭。我们作为天使轮投资方参与。">China's first general-purpose home robot company, building embodied-AI robots already serving hundreds of real households. We joined as an angel-round investor.</p>
+              <div class="fp-name" data-en="Futuring" data-zh="未来不远">Futuring</div>
+              <p class="fp-desc" data-en="China's first general-purpose home robot company, building embodied-AI robots already serving hundreds of real households. We joined as an angel-round investor." data-zh="中国首个专注家庭场景的通用机器人公司，具身智能机器人已进入数百个真实家庭。我们于天使轮参与投资。">China's first general-purpose home robot company, building embodied-AI robots already serving hundreds of real households. We joined as an angel-round investor.</p>
               <div class="fp-year" data-en="Invested 2026 · Angel round" data-zh="投资于 2026 · 天使轮">Invested 2026 · Angel round</div>
             </div>
           </div>
@@ -610,8 +618,8 @@ section{scroll-margin-top:80px}
             <div class="fp-scrim"></div>
             <div class="fp-body">
               <div class="fp-logo"><img src="assets/logo-epigenic.svg" alt="Epigenic"></div>
-              <div class="fp-sector" data-en="Biotech · Epigenetic Gene Editing" data-zh="生物科技 · 表观遗传基因编辑">Biotech · Epigenetic Gene Editing</div>
-              <div class="fp-name" data-html="1" data-en="Epigenic" data-zh="Epigenic<span class='fp-cn'> 益杰立科</span>">Epigenic</div>
+              <div class="fp-sector" data-en="Biotech · Epigenetic Gene Editing" data-zh="生物科技 · 表观遗传编辑">Biotech · Epigenetic Gene Editing</div>
+              <div class="fp-name" data-en="Epigenic" data-zh="益杰立科">Epigenic</div>
               <p class="fp-desc" data-en="A pioneer in epigenetic gene-regulation therapeutics, developing a new class of medicines that treat disease without cutting DNA." data-zh="表观遗传基因调控疗法的先行者，开发无需切割 DNA 即可治疗疾病的新一代药物。">A pioneer in epigenetic gene-regulation therapeutics, developing a new class of medicines that treat disease without cutting DNA.</p>
               <div class="fp-year" data-en="Early-stage portfolio" data-zh="早期投资组合">Early-stage portfolio</div>
             </div>
@@ -664,9 +672,6 @@ section{scroll-margin-top:80px}
         <div class="tm"><div class="tm-name">DING Yihan</div><div class="tm-role" data-en="Partner, Technology" data-zh="合伙人，科技方向">Partner, Technology</div></div>
         <div class="tm"><div class="tm-name">Wenbo LU</div><div class="tm-role" data-en="VP, Consumer &amp; Technology" data-zh="副总裁，消费与科技">VP, Consumer &amp; Technology</div></div>
         <div class="tm"><div class="tm-name">William YING</div><div class="tm-role" data-en="Investor, Consumer &amp; Technology" data-zh="投资经理，消费与科技">Investor, Consumer &amp; Technology</div></div>
-        <div class="tm"><div class="tm-name">Xinyu HUANG</div><div class="tm-role" data-en="Investor, Enterprise &amp; Frontier Tech" data-zh="投资经理，企业软件与前沿技术">Investor, Enterprise &amp; Frontier Tech</div></div>
-        <div class="tm"><div class="tm-name">Jojo ZHANG</div><div class="tm-role" data-en="Investor, Enterprise Infrastructure" data-zh="投资经理，企业基础设施">Investor, Enterprise Infrastructure</div></div>
-        <div class="tm"><div class="tm-name">Chao LI</div><div class="tm-role" data-en="Investor, Hardware &amp; ESG" data-zh="投资经理，硬件与 ESG">Investor, Hardware &amp; ESG</div></div>
         <div class="tm"><div class="tm-name">Amanda HOU</div><div class="tm-role" data-en="Talent &amp; Recruitment" data-zh="人才招募与咨询">Talent &amp; Recruitment</div></div>
       </div>
     </div>
